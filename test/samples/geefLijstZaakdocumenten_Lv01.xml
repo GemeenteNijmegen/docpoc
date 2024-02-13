@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <zkn:zakLa01 xmlns:zkn="http://www.egem.nl/StUF/sector/zkn/0310">
+      <zkn:stuurgegevens>
+        <stuf:berichtcode xmlns:stuf="http://www.egem.nl/StUF/StUF0301">La01</stuf:berichtcode>
+        <stuf:entiteittype xmlns:stuf="http://www.egem.nl/StUF/StUF0301">ZAK</stuf:entiteittype>
+      </zkn:stuurgegevens>
+      <zkn:parameters>
+        <stuf:indicatorVervolgvraag xmlns:stuf="http://www.egem.nl/StUF/StUF0301">false</stuf:indicatorVervolgvraag>
+      </zkn:parameters>
+      <zkn:antwoord>
+        <zkn:object xmlns:stuf="http://www.egem.nl/StUF/StUF0301" stuf:entiteittype="ZAK">
+          <zkn:identificatie stuf:exact="true">b4c9cfb1-15d2-4d67-914d-22339c2d1492</zkn:identificatie>
+          <zkn:registratiedatum stuf:exact="true" stuf:indOnvolledigeDatum="V">20230920</zkn:registratiedatum>
+          <zkn:heeftRelevant stuf:entiteittype="ZAKEDC">
+            <zkn:gerelateerde stuf:entiteittype="EDC">
+              <zkn:identificatie stuf:exact="true">6ffa451a-a340-403d-9af3-0e547add9c22</zkn:identificatie>
+              <zkn:dct.omschrijving stuf:exact="true">Ontvangstbevestiging</zkn:dct.omschrijving>
+              <zkn:creatiedatum stuf:exact="true" stuf:indOnvolledigeDatum="V">20230920</zkn:creatiedatum>
+              <zkn:titel stuf:exact="true">Test d nummer Michel</zkn:titel>
+              <zkn:formaat stuf:exact="true">.txt</zkn:formaat>
+              <zkn:vertrouwelijkAanduiding stuf:exact="true">ZAAKVERTROUWELIJK</zkn:vertrouwelijkAanduiding>
+              <zkn:auteur stuf:exact="true">CORSA</zkn:auteur>
+            </zkn:gerelateerde>
+            <zkn:titel stuf:exact="true">Test d nummer Michel</zkn:titel>
+          </zkn:heeftRelevant>
+          <zkn:heeftRelevant stuf:entiteittype="ZAKEDC">
+            <zkn:gerelateerde stuf:entiteittype="EDC">
+              <zkn:identificatie stuf:exact="true">11bbe6ff-d946-4ef6-aab4-0775c025b151</zkn:identificatie>
+              <zkn:dct.omschrijving stuf:exact="true">Beschikking</zkn:dct.omschrijving>
+              <zkn:creatiedatum stuf:exact="true" stuf:indOnvolledigeDatum="V">20230920</zkn:creatiedatum>
+              <zkn:titel stuf:exact="true">test d-nummer 2</zkn:titel>
+              <zkn:formaat stuf:exact="true">.txt</zkn:formaat>
+              <zkn:vertrouwelijkAanduiding stuf:exact="true">ZAAKVERTROUWELIJK</zkn:vertrouwelijkAanduiding>
+              <zkn:auteur stuf:exact="true">CORSA</zkn:auteur>
+            </zkn:gerelateerde>
+            <zkn:titel stuf:exact="true">test d-nummer 2</zkn:titel>
+          </zkn:heeftRelevant>
+          <zkn:heeftRelevant stuf:entiteittype="ZAKEDC">
+            <zkn:gerelateerde stuf:entiteittype="EDC">
+              <zkn:identificatie stuf:exact="true">ad20701c-cc99-4597-a976-7c707105d9ab</zkn:identificatie>
+              <zkn:dct.omschrijving stuf:exact="true">Verdaging</zkn:dct.omschrijving>
+              <zkn:creatiedatum stuf:exact="true" stuf:indOnvolledigeDatum="V">20230928</zkn:creatiedatum>
+              <zkn:titel stuf:exact="true">test d nummer 3</zkn:titel>
+              <zkn:formaat stuf:exact="true">.txt</zkn:formaat>
+              <zkn:vertrouwelijkAanduiding stuf:exact="true">ZAAKVERTROUWELIJK</zkn:vertrouwelijkAanduiding>
+              <zkn:auteur stuf:exact="true">CORSA</zkn:auteur>
+            </zkn:gerelateerde>
+            <zkn:titel stuf:exact="true">test d nummer 3</zkn:titel>
+          </zkn:heeftRelevant>
+          <zkn:heeftRelevant stuf:entiteittype="ZAKEDC">
+            <zkn:gerelateerde stuf:entiteittype="EDC">
+              <zkn:identificatie stuf:exact="true">1a654f28-cb6d-45d4-b286-145def61dbe6</zkn:identificatie>
+              <zkn:dct.omschrijving stuf:exact="true">Ontvangstbevestiging</zkn:dct.omschrijving>
+              <zkn:creatiedatum stuf:exact="true" stuf:indOnvolledigeDatum="V">20231004</zkn:creatiedatum>
+              <zkn:titel stuf:exact="true">Test michel om te kijken of Xential opent</zkn:titel>
+              <zkn:formaat stuf:exact="true">.docx</zkn:formaat>
+              <zkn:vertrouwelijkAanduiding stuf:exact="true">ZAAKVERTROUWELIJK</zkn:vertrouwelijkAanduiding>
+              <zkn:auteur stuf:exact="true">CORSA</zkn:auteur>
+            </zkn:gerelateerde>
+            <zkn:titel stuf:exact="true">Test michel om te kijken of Xential opent</zkn:titel>
+          </zkn:heeftRelevant>
+          <zkn:heeftRelevant stuf:entiteittype="ZAKEDC">
+            <zkn:gerelateerde stuf:entiteittype="EDC">
+              <zkn:identificatie stuf:exact="true">0ee0da20-d9d2-4593-97a9-131904c09e9c</zkn:identificatie>
+              <zkn:dct.omschrijving stuf:exact="true">Ontvangstbevestiging</zkn:dct.omschrijving>
+              <zkn:creatiedatum stuf:exact="true" stuf:indOnvolledigeDatum="V">20231004</zkn:creatiedatum>
+              <zkn:titel stuf:exact="true">TEST Sjaak 0410 1426</zkn:titel>
+              <zkn:formaat stuf:exact="true">.txt</zkn:formaat>
+              <zkn:vertrouwelijkAanduiding stuf:exact="true">ZAAKVERTROUWELIJK</zkn:vertrouwelijkAanduiding>
+              <zkn:auteur stuf:exact="true">CORSA</zkn:auteur>
+            </zkn:gerelateerde>
+            <zkn:titel stuf:exact="true">TEST Sjaak 0410 1426</zkn:titel>
+          </zkn:heeftRelevant>
+          <zkn:heeftRelevant stuf:entiteittype="ZAKEDC">
+            <zkn:gerelateerde stuf:entiteittype="EDC">
+              <zkn:identificatie stuf:exact="true">9e5a4a61-549b-43a5-a3ba-791064e07012</zkn:identificatie>
+              <zkn:dct.omschrijving stuf:exact="true">Ontvangstbevestiging</zkn:dct.omschrijving>
+              <zkn:creatiedatum stuf:exact="true" stuf:indOnvolledigeDatum="V">20231004</zkn:creatiedatum>
+              <zkn:titel stuf:exact="true">Test Sjaak 0410 1427</zkn:titel>
+              <zkn:formaat stuf:exact="true">.docx</zkn:formaat>
+              <zkn:vertrouwelijkAanduiding stuf:exact="true">ZAAKVERTROUWELIJK</zkn:vertrouwelijkAanduiding>
+              <zkn:auteur stuf:exact="true">CORSA</zkn:auteur>
+            </zkn:gerelateerde>
+            <zkn:titel stuf:exact="true">Test Sjaak 0410 1427</zkn:titel>
+          </zkn:heeftRelevant>
+        </zkn:object>
+      </zkn:antwoord>
+    </zkn:zakLa01>
+  </soap:Body>
+</soap:Envelope>  

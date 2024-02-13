@@ -1,0 +1,11 @@
+[
+  {
+    "url": "http://zaken/zaakid",
+    "informatieobject": "https://documenten-api.vng.cloud/api/v1/enkelvoudiginformatieobjecten/{uuid}",
+    "object": "http://example.com",
+    "objectType": "besluit",
+    "_expand": {
+      "informatieobject.titel": ""
+    }
+  }
+]

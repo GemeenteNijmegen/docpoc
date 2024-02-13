@@ -1,0 +1,51 @@
+{
+  "url": "https://example./com/zaken/api/v1/zaken/d9696ca2-0f26-4322-b01d-c26046b71233",
+  "uuid": "d9696ca2-0f26-4322-b01d-c26046b71233",
+  "identificatie": "Z23.047208",
+  "bronorganisatie": "001479179",
+  "omschrijving": "",
+  "toelichting": "",
+  "zaaktype": "https://example./com/catalogi/api/v1/zaaktypen/1f38a02a-e6e7-4665-b0f9-f2213784e5b8",
+  "registratiedatum": "2023-03-28",
+  "verantwoordelijkeOrganisatie": "001479179",
+  "startdatum": "2023-03-28",
+  "einddatum": "2023-03-28",
+  "einddatumGepland": "2023-06-20",
+  "uiterlijkeEinddatumAfdoening": "2023-06-11",
+  "publicatiedatum": null,
+  "communicatiekanaal": "",
+  "productenOfDiensten": [],
+  "vertrouwelijkheidaanduiding": "zaakvertrouwelijk",
+  "betalingsindicatie": "",
+  "betalingsindicatieWeergave": "",
+  "laatsteBetaaldatum": null,
+  "zaakgeometrie": null,
+  "verlenging": {
+      "reden": "",
+      "duur": null
+  },
+  "opschorting": {
+      "indicatie": false,
+      "reden": ""
+  },
+  "selectielijstklasse": "",
+  "hoofdzaak": null,
+  "deelzaken": [],
+  "relevanteAndereZaken": [],
+  "eigenschappen": [],
+  "status": "https://example./com/zaken/api/v1/statussen/debff7f7-a66e-43f7-8b4b-f9a2d26bbcbd",
+  "kenmerken": [
+      {
+          "kenmerk": "f177a15b-458b-4680-8fa0-fa229fb252b7",
+          "bron": "JZ4ALL_formSubmission"
+      },
+      {
+          "kenmerk": "5055d2d4-b4bd-4f1e-b111-1425d2bd946e",
+          "bron": "JZ4ALL_zaak"
+      }
+  ],
+  "archiefnominatie": "blijvend_bewaren",
+  "archiefstatus": "nog_te_archiveren",
+  "archiefactiedatum": "2028-03-28",
+  "resultaat": "https://example./com/zaken/api/v1/resultaten/bf1cb279-06d1-47ed-a7a4-f6aad854c619"
+}

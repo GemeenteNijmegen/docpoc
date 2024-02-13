@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <zkn:zakLa01 xmlns:zkn="http://www.egem.nl/StUF/sector/zkn/0310">
+      <zkn:stuurgegevens>
+        <stuf:berichtcode xmlns:stuf="http://www.egem.nl/StUF/StUF0301">La01</stuf:berichtcode>
+        <stuf:entiteittype xmlns:stuf="http://www.egem.nl/StUF/StUF0301">ZAK</stuf:entiteittype>
+      </zkn:stuurgegevens>
+      <zkn:parameters>
+        <stuf:indicatorVervolgvraag xmlns:stuf="http://www.egem.nl/StUF/StUF0301">false</stuf:indicatorVervolgvraag>
+      </zkn:parameters>
+      <zkn:antwoord>
+        <zkn:object xmlns:stuf="http://www.egem.nl/StUF/StUF0301" stuf:entiteittype="ZAK">
+          <zkn:identificatie stuf:exact="true">d66ab013-c11d-47b3-96d6-b6b57a185035</zkn:identificatie>
+          <zkn:startdatum stuf:exact="true" stuf:indOnvolledigeDatum="V">20210914</zkn:startdatum>
+          <zkn:registratiedatum stuf:exact="true" stuf:indOnvolledigeDatum="V">20210914</zkn:registratiedatum>
+          <zkn:zaakniveau stuf:exact="true">1</zkn:zaakniveau>
+          <zkn:deelzakenIndicatie stuf:exact="true">N</zkn:deelzakenIndicatie>
+          <stuf:extraElementen>
+            <stuf:extraElement naam="corsa_dossierid" stuf:exact="true" stuf:indOnvolledigeDatum="V">Z21.053407</stuf:extraElement>
+          </stuf:extraElementen>
+          <zkn:heeftAlsInitiator stuf:entiteittype="ZAKBTRINI">
+            <zkn:gerelateerde>
+              <zkn:nietNatuurlijkPersoon stuf:entiteittype="NNP">
+                <bg:inn.nnpId xmlns:bg="http://www.egem.nl/StUF/sector/bg/0310" stuf:exact="true">000000000</bg:inn.nnpId>
+                <bg:naam xmlns:bg="http://www.egem.nl/StUF/sector/bg/0310" stuf:exact="true">Woweb B.V.</bg:naam>
+              </zkn:nietNatuurlijkPersoon>
+            </zkn:gerelateerde>
+          </zkn:heeftAlsInitiator>
+        </zkn:object>
+      </zkn:antwoord>
+    </zkn:zakLa01>
+  </soap:Body>
+</soap:Envelope>

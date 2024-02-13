@@ -1,0 +1,83 @@
+{
+  "count": 123,
+  "next": "http://api.example.org/accounts/?page=4",
+  "previous": "http://api.example.org/accounts/?page=2",
+  "results": [
+    {
+      "url": "http://example.com",
+      "identificatie": "string",
+      "bronorganisatie": "string",
+      "creatiedatum": "2019-08-24",
+      "titel": "string",
+      "vertrouwelijkheidaanduiding": "openbaar",
+      "auteur": "string",
+      "status": "in_bewerking",
+      "formaat": "string",
+      "taal": "str",
+      "versie": 0,
+      "beginRegistratie": "2019-08-24T14:15:22Z",
+      "bestandsnaam": "string",
+      "inhoud": "http://example.com",
+      "bestandsomvang": 9223372036854776000,
+      "link": "http://example.com",
+      "beschrijving": "string",
+      "ontvangstdatum": "2019-08-24",
+      "verzenddatum": "2019-08-24",
+      "indicatieGebruiksrecht": true,
+      "verschijningsvorm": "string",
+      "ondertekening": {
+        "soort": "analoog",
+        "datum": "2019-08-24"
+      },
+      "integriteit": {
+        "algoritme": "crc_16",
+        "waarde": "string",
+        "datum": "2019-08-24"
+      },
+      "informatieobjecttype": "http://example.com",
+      "locked": true,
+      "bestandsdelen": [
+        {
+          "url": "http://example.com",
+          "volgnummer": 0,
+          "omvang": 0,
+          "voltooid": true,
+          "lock": "string"
+        }
+      ],
+      "trefwoorden": [
+        "bouwtekening",
+        "vergunning",
+        "aanvraag"
+      ],
+      "_expand": {
+        "informatieobjecttype": {
+          "url": "http://example.com",
+          "catalogus": "http://example.com",
+          "omschrijving": "string",
+          "vertrouwelijkheidaanduiding": "openbaar",
+          "beginGeldigheid": "2019-08-24",
+          "eindeGeldigheid": "2019-08-24",
+          "beginObject": "2019-08-24",
+          "eindeObject": "2019-08-24",
+          "concept": true,
+          "zaaktypen": "string",
+          "besluittypen": [
+            "http://example.com"
+          ],
+          "informatieobjectcategorie": "string",
+          "trefwoord": [
+            "string"
+          ],
+          "omschrijvingGeneriek": {
+            "informatieobjecttypeOmschrijvingGeneriek": "string",
+            "definitieInformatieobjecttypeOmschrijvingGeneriek": "string",
+            "herkomstInformatieobjecttypeOmschrijvingGeneriek": "string",
+            "hierarchieInformatieobjecttypeOmschrijvingGeneriek": "string",
+            "opmerkingInformatieobjecttypeOmschrijvingGeneriek": "string"
+          }
+        }
+      }
+    }
+  ]
+}
