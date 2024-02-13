@@ -1,9 +1,10 @@
 // import { UUID } from 'crypto';
 import { UUID } from 'crypto';
 import { XMLParser } from 'fast-xml-parser';
-import { z } from 'zod';
 import { CorsaClient } from './CorsaClient';
+import { ObjectInformatieObject } from './ObjectInformatieObject';
 import { OpenZaakClient } from './OpenZaakClient';
+import { ZaakDocumentenSchema } from './ZaakDocumentenSchema';
 
 export class DocumentVertaalService {
   constructor() {
@@ -42,23 +43,6 @@ export class DocumentVertaalService {
     });
   }
 }
-
-const ObjectInformatieObjectSchema = z.object({
-  url: z.string(),
-  informatieobject: z.string(),
-  object: z.string(),
-  objectType: z.enum(['besluit', 'zaak', 'verzoek']),
-});
-export type ObjectInformatieObject = z.infer<typeof ObjectInformatieObjectSchema>;
-
-const ZaakDocumentSchema = z.object({
-  'zkn:gerelateerde': z.object({
-    'zkn:identificatie': z.string().uuid(),
-  }).passthrough(),
-});
-export type ZaakDocument = z.infer<typeof ZaakDocumentSchema>;
-
-const ZaakDocumentenSchema = z.array(ZaakDocumentSchema);
 
 export class GeefLijstZaakDocumentenMapper {
   parser: XMLParser;
