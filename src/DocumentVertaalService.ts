@@ -43,7 +43,6 @@ export class DocumentVertaalService {
   }
 }
 
-
 const ObjectInformatieObjectSchema = z.object({
   url: z.string(),
   informatieobject: z.string(),
@@ -51,6 +50,15 @@ const ObjectInformatieObjectSchema = z.object({
   objectType: z.enum(['besluit', 'zaak', 'verzoek']),
 });
 export type ObjectInformatieObject = z.infer<typeof ObjectInformatieObjectSchema>;
+
+const ZaakDocumentSchema = z.object({
+  'zkn:gerelateerde': z.object({
+    'zkn:identificatie': z.string().uuid(),
+  }).passthrough(),
+});
+export type ZaakDocument = z.infer<typeof ZaakDocumentSchema>;
+
+const ZaakDocumentenSchema = z.array(ZaakDocumentSchema);
 
 export class GeefLijstZaakDocumentenMapper {
   parser: XMLParser;
@@ -60,7 +68,7 @@ export class GeefLijstZaakDocumentenMapper {
 
   map(xml: string) {
     const json = this.parser.parse(xml);
-    const docs = json['soap:Envelope']['soap:Body']['zkn:zakLa01']['zkn:antwoord']['zkn:object']['zkn:heeftRelevant'];
+    const docs = ZaakDocumentenSchema.parse(json['soap:Envelope']['soap:Body']['zkn:zakLa01']['zkn:antwoord']['zkn:object']['zkn:heeftRelevant']);
     const results = docs.map((doc: any) => doc['zkn:gerelateerde']['zkn:identificatie']);
     return results;
   }
