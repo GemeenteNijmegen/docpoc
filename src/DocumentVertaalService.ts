@@ -4,7 +4,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { CorsaClient } from './CorsaClient';
 import { ObjectInformatieObject } from './ObjectInformatieObject';
 import { OpenZaakClient } from './OpenZaakClient';
-import { ZaakDocument, ZaakDocumentenSchema } from './ZaakDocumentenSchema';
+import { ZaakDocumentenSchema } from './ZaakDocumentenSchema';
 
 /**
  * This class orchestrates the communication between, and translation to/from the zaakDMS implementation
@@ -57,7 +57,7 @@ export class GeefLijstZaakDocumentenMapper {
     this.parser = new XMLParser();
   }
 
-  map(xml: string): ZaakDocument[] {
+  map(xml: string): UUID[] {
     const json = this.parser.parse(xml);
     const docs = ZaakDocumentenSchema.parse(json['soap:Envelope']['soap:Body']['zkn:zakLa01']['zkn:antwoord']['zkn:object']['zkn:heeftRelevant']);
     const results = docs.map((doc: any) => doc['zkn:gerelateerde']['zkn:identificatie']);
