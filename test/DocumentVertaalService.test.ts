@@ -1,7 +1,21 @@
 import { randomUUID } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as zaak from './samples/zaak.json';
 import { DocumentVertaalService, GeefLijstZaakDocumentenMapper } from '../src/DocumentVertaalService';
+import { OpenZaakClient } from '../src/OpenZaakClient';
+
+jest.mock('../src/OpenZaakClient', () => {
+  return {
+    OpenZaakClient: jest.fn(() => {
+      return {
+        request: async(_url: string) => {
+          return zaak;
+        },
+      };
+    }),
+  };
+});
 
 describe('Map ZaakDMS list documents response to UUID array', () => {
   test('Parse geefLijstZaakDocumenten to return UUIDs', async() => {
@@ -22,9 +36,12 @@ describe('Map ZaakDMS list documents response to UUID array', () => {
     expect(service.listObjectInformatieObjecten(randomUUID())).toHaveLength(6);
   });
 
-  test('Get corsa UUID from zaak', () => {
-    const zaakClient = new OpenZaakClient();
-    const zaak = zaakClient.getZaak('d9696ca2-0f26-4322-b01d-c26046b71233');
-    expect(zaak.corsaUUID).toBeTruthy();
+  test('Get corsa UUID from zaak', async() => {
+    const zaakClient = new OpenZaakClient({
+      baseUrl: 'https://example.com',
+    });
+    const sampleZaak = await zaakClient.request('/zaken/api/v1/zaken/d9696ca2-0f26-4322-b01d-c26046b71233');
+    const corsaId = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk.bron == 'Corsa_Id').kenmerk;
+    expect(corsaId).toBe('eeb22764-e184-487e-a2eb-b6280addd0f8');
   });
 });

@@ -1,5 +1,5 @@
 {
-  "url": "https://example./com/zaken/api/v1/zaken/d9696ca2-0f26-4322-b01d-c26046b71233",
+  "url": "https://example.com/zaken/api/v1/zaken/d9696ca2-0f26-4322-b01d-c26046b71233",
   "uuid": "d9696ca2-0f26-4322-b01d-c26046b71233",
   "identificatie": "Z23.047208",
   "bronorganisatie": "001479179",
@@ -42,6 +42,10 @@
       {
           "kenmerk": "5055d2d4-b4bd-4f1e-b111-1425d2bd946e",
           "bron": "JZ4ALL_zaak"
+      },
+      {
+        "kenmerk": "eeb22764-e184-487e-a2eb-b6280addd0f8",
+        "bron": "Corsa_Id"
       }
   ],
   "archiefnominatie": "blijvend_bewaren",
