@@ -23,12 +23,12 @@ export class DocumentVertaalService {
     const documentXMLFromCorsa = new CorsaClient().getZaakDocuments(corsaZaakUUID);
     const corsaDocumentUUIDs = new GeefLijstZaakDocumentenMapper().map(documentXMLFromCorsa);
     // Transform response to objectInformatieObjecten response
-    const objects = this.transformUUIDs(corsaZaakUUID, corsaDocumentUUIDs);
+    const objects = this.mapUUIDsToObjectInformatieObjecten(corsaZaakUUID, corsaDocumentUUIDs);
     // Return response
     return objects;
   }
 
-  transformUUIDs(zaakId: UUID, uuids: UUID[]): ObjectInformatieObject[] {
+  mapUUIDsToObjectInformatieObjecten(zaakId: UUID, uuids: UUID[]): ObjectInformatieObject[] {
     return uuids.map(uuid => {
       return {
         url: `http://zaken.nl/${zaakId}`,
