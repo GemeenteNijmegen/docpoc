@@ -1,26 +1,27 @@
 // import { UUID } from 'crypto';
-import { UUID, randomUUID } from 'crypto';
+import { UUID } from 'crypto';
 import { XMLParser } from 'fast-xml-parser';
 import { z } from 'zod';
 import { CorsaClient } from './CorsaClient';
+import { OpenZaakClient } from './OpenZaakClient';
 
 export class DocumentVertaalService {
   constructor() {
 
   }
 
-  listObjectInformatieObjecten(_zaakUrl: string): ObjectInformatieObject[] {
+  async listObjectInformatieObjecten(_zaakUrl: string): Promise<ObjectInformatieObject[]> {
 
     // Call zaken/uuid endpoint (in open zaak)
     // const zaak = getZaak(zaakUrl);
 
     // Retrieve corsa ID from zaak
-    const corsaZaakUUID = randomUUID();
-
+    const zaakClient = new OpenZaakClient({ baseUrl: '' });
+    const sampleZaak = await zaakClient.request(_zaakUrl);
+    const corsaZaakUUID = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk.bron == 'Corsa_Id').kenmerk;
     // Call ZaakDMS-endpoint with corsa UUID
     const documentXMLFromCorsa = new CorsaClient().getZaakDocuments(corsaZaakUUID);
     const corsaDocumentUUIDs = new GeefLijstZaakDocumentenMapper().map(documentXMLFromCorsa);
-
     // Transform response to objectInformatieObjecten response
     const objects = this.transformUUIDs(corsaZaakUUID, corsaDocumentUUIDs);
     // Return response

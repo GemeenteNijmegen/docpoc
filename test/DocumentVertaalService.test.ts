@@ -33,7 +33,7 @@ describe('Map ZaakDMS list documents response to UUID array', () => {
 
   test('Return objectinformatieObjecten object', async() => {
     const service = new DocumentVertaalService();
-    expect(service.listObjectInformatieObjecten(randomUUID())).toHaveLength(6);
+    expect(await service.listObjectInformatieObjecten(randomUUID())).toHaveLength(6);
   });
 
   test('Get corsa UUID from zaak', async() => {
