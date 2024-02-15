@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as zaak from './samples/zaak.json';
-import { DocumentVertaalService, GeefLijstZaakDocumentenMapper } from '../src/DocumentVertaalService';
+import { DocumentVertaalService, GeefLijstZaakDocumentenMapper, GeefZaakDocumentMapper } from '../src/DocumentVertaalService';
 import { OpenZaakClient } from '../src/OpenZaakClient';
 
 jest.mock('../src/OpenZaakClient', () => {
@@ -50,5 +50,10 @@ describe('Map ZaakDMS document response to get enkelvoudigInformatieObject respo
   test('Calling enkelvoudigInformatieObject method returns enkelvoudig InformatieObject', async() => {
     const service = new DocumentVertaalService();
     expect(await service.getEnkelVoudigInformatieObject(`https://example.com/api/v1/documenten/enkelvoudiginformatieobject/${randomUUID()}`)).toHaveProperty('url');
+  });
+
+  test('GeefZaakDetailsMapper can transform between zaakDMS & Document API', async() => {
+    const file = fs.readFileSync(path.resolve(__dirname, './samples/geefZaakDocumentLezen_Lv0.xml'));
+    expect(await new GeefZaakDocumentMapper().map(file.toString('utf-8'))).toHaveProperty('url');
   });
 });

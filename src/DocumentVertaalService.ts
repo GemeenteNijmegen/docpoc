@@ -5,7 +5,6 @@ import { EnkelvoudigInformatieObject, EnkelvoudigInformatieObjectSchema } from '
 import { ObjectInformatieObject } from './ObjectInformatieObject';
 import { OpenZaakClient } from './OpenZaakClient';
 import { ZaakDocumentenSchema } from './ZaakDocumentenSchema';
-import * as enkelvoudigInformatieObjectSample from '../test/samples/enkelvoudigInformatieObject.json';
 /**
  * This class orchestrates the communication between, and translation to/from the zaakDMS implementation
  * and the ZGW implementation. It should partially implement the Document API. For now, the
@@ -17,16 +16,13 @@ import * as enkelvoudigInformatieObjectSample from '../test/samples/enkelvoudigI
 export class DocumentVertaalService {
   async listObjectInformatieObjecten(zaakUrl: string): Promise<ObjectInformatieObject[]> {
 
-    // Call zaken/uuid endpoint (in open zaak)
-    // const zaak = getZaak(zaakUrl);
-
     // Retrieve corsa ID from zaak
     const zaakClient = new OpenZaakClient({ baseUrl: '' });
     const sampleZaak = await zaakClient.request(zaakUrl);
     const corsaZaakUUID = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk.bron == 'Corsa_Id').kenmerk;
 
     // Call ZaakDMS-endpoint with corsa UUID
-    const documentXMLFromCorsa = new CorsaClient().getZaakDocuments(corsaZaakUUID);
+    const documentXMLFromCorsa = new CorsaClient().geefLijstZaakDocumenten(corsaZaakUUID);
     const corsaDocumentUUIDs = new GeefLijstZaakDocumentenMapper().map(documentXMLFromCorsa);
 
     // Transform response to objectInformatieObjecten response
@@ -36,12 +32,16 @@ export class DocumentVertaalService {
     return objects;
   }
 
-  async getEnkelVoudigInformatieObject(_objectUrl: string): Promise<EnkelvoudigInformatieObject> {
+  async getEnkelVoudigInformatieObject(objectUrlString: string): Promise<EnkelvoudigInformatieObject> {
     // Get document from Corsa based on provided UUID (last path part in call)
+    const objectUrl = new URL(objectUrlString);
+    const uuid = objectUrl.pathname.split('/').pop() as UUID;
+    const documentDetails = new CorsaClient().geefZaakDocument(uuid);
 
     // Transform response to enkelvoudigInformatieObject object
+    const enkelvoudigInformatieObject = new GeefZaakDocumentMapper().map(documentDetails);
     // Return object
-    return EnkelvoudigInformatieObjectSchema.parse(enkelvoudigInformatieObjectSample);
+    return EnkelvoudigInformatieObjectSchema.parse(enkelvoudigInformatieObject);
   }
 
   mapUUIDsToObjectInformatieObjecten(zaakId: UUID, uuids: UUID[]): ObjectInformatieObject[] {
@@ -70,5 +70,48 @@ export class GeefLijstZaakDocumentenMapper {
     const docs = ZaakDocumentenSchema.parse(json['soap:Envelope']['soap:Body']['zkn:zakLa01']['zkn:antwoord']['zkn:object']['zkn:heeftRelevant']);
     const results = docs.map((doc: any) => doc['zkn:gerelateerde']['zkn:identificatie']);
     return results;
+  }
+}
+
+export class GeefZaakDocumentMapper {
+  parser: XMLParser;
+  constructor() {
+    this.parser = new XMLParser();
+  }
+
+  map(xml: string): EnkelvoudigInformatieObject {
+    const json = this.parser.parse(xml);
+    const doc = json['soap:Envelope']['soap:Body']['zkn:edcLa01']['zkn:antwoord']['zkn:object'];
+    const enkelvoudigInformatieObject: EnkelvoudigInformatieObject = {
+      url: `https://example/com/api/v1/documenten/${doc['zkn:identificatie']}`,
+      auteur: doc['zkn:auteur'],
+      beginRegistratie: this.mapDate(doc['zkn:creatiedatum']),
+      bestandsdelen: [],
+      bronorganisatie: '123456789',
+      creatiedatum: doc['zkn:creatiedatum'],
+      informatieobjecttype: 'https://example.com', //TODO Catalogus API referentie
+      locked: false, //Placeholder
+      taal: this.mapLanguage(doc['zkn:taal']),
+      titel: doc['zkn:titel'],
+      versie: 1, //Placeholder
+    };
+    return EnkelvoudigInformatieObjectSchema.parse(enkelvoudigInformatieObject);
+  }
+
+  mapLanguage(iso6391: string) {
+    if (iso6391=='nl') {
+      return 'dut';
+    } else {
+      throw Error('Language not supported');
+    };
+  }
+
+  mapDate(yyyymmdd: string|number) {
+    const dateString = yyyymmdd.toString();
+    const year = Number(dateString.substring(0, 4));
+    const month = Number(dateString.substring(4, 6));
+    const day = Number(dateString.substring(6, 8));
+    const date = new Date(year, month-1, day);
+    return date.toISOString();
   }
 }
