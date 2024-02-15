@@ -1,11 +1,11 @@
-// import { UUID } from 'crypto';
 import { UUID } from 'crypto';
 import { XMLParser } from 'fast-xml-parser';
 import { CorsaClient } from './CorsaClient';
+import { EnkelvoudigInformatieObject, EnkelvoudigInformatieObjectSchema } from './EnkelvoudigInformatieObjectSchema';
 import { ObjectInformatieObject } from './ObjectInformatieObject';
 import { OpenZaakClient } from './OpenZaakClient';
 import { ZaakDocumentenSchema } from './ZaakDocumentenSchema';
-
+import * as enkelvoudigInformatieObjectSample from '../test/samples/enkelvoudigInformatieObject.json';
 /**
  * This class orchestrates the communication between, and translation to/from the zaakDMS implementation
  * and the ZGW implementation. It should partially implement the Document API. For now, the
@@ -15,14 +15,14 @@ import { ZaakDocumentenSchema } from './ZaakDocumentenSchema';
  * with bron 'Corsa_Id'.
  */
 export class DocumentVertaalService {
-  async listObjectInformatieObjecten(_zaakUrl: string): Promise<ObjectInformatieObject[]> {
+  async listObjectInformatieObjecten(zaakUrl: string): Promise<ObjectInformatieObject[]> {
 
     // Call zaken/uuid endpoint (in open zaak)
     // const zaak = getZaak(zaakUrl);
 
     // Retrieve corsa ID from zaak
     const zaakClient = new OpenZaakClient({ baseUrl: '' });
-    const sampleZaak = await zaakClient.request(_zaakUrl);
+    const sampleZaak = await zaakClient.request(zaakUrl);
     const corsaZaakUUID = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk.bron == 'Corsa_Id').kenmerk;
 
     // Call ZaakDMS-endpoint with corsa UUID
@@ -34,6 +34,14 @@ export class DocumentVertaalService {
 
     // Return response
     return objects;
+  }
+
+  async getEnkelVoudigInformatieObject(_objectUrl: string): Promise<EnkelvoudigInformatieObject> {
+    // Get document from Corsa based on provided UUID (last path part in call)
+
+    // Transform response to enkelvoudigInformatieObject object
+    // Return object
+    return EnkelvoudigInformatieObjectSchema.parse(enkelvoudigInformatieObjectSample);
   }
 
   mapUUIDsToObjectInformatieObjecten(zaakId: UUID, uuids: UUID[]): ObjectInformatieObject[] {
