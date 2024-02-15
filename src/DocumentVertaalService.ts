@@ -1,4 +1,4 @@
-import { UUID } from 'crypto';
+import { UUID, randomUUID } from 'crypto';
 import { XMLParser } from 'fast-xml-parser';
 import { CorsaClient } from './CorsaClient';
 import { EnkelvoudigInformatieObject, EnkelvoudigInformatieObjectSchema } from './EnkelvoudigInformatieObjectSchema';
@@ -76,24 +76,37 @@ export class GeefLijstZaakDocumentenMapper {
 export class GeefZaakDocumentMapper {
   parser: XMLParser;
   constructor() {
-    this.parser = new XMLParser();
+    this.parser = new XMLParser({
+      ignoreAttributes: false,
+      alwaysCreateTextNode: true,
+      textNodeName: 'text',
+      attributeNamePrefix: '',
+    });
   }
 
   map(xml: string): EnkelvoudigInformatieObject {
     const json = this.parser.parse(xml);
     const doc = json['soap:Envelope']['soap:Body']['zkn:edcLa01']['zkn:antwoord']['zkn:object'];
     const enkelvoudigInformatieObject: EnkelvoudigInformatieObject = {
-      url: `https://example/com/api/v1/documenten/${doc['zkn:identificatie']}`,
-      auteur: doc['zkn:auteur'],
-      beginRegistratie: this.mapDate(doc['zkn:creatiedatum']),
-      bestandsdelen: [],
+      url: `https://example/com/api/v1/documenten/${doc['zkn:identificatie'].text}`,
+      auteur: doc['zkn:auteur'].text,
+      beginRegistratie: this.mapDate(doc['zkn:creatiedatum'].text),
+      bestandsdelen: [{
+        url: `https://example.com/api/v1/documenten/enkelvoudiginformatieobjecten/${randomUUID()}/download`,
+        lock: 'randomzogenaamdehash', //TODO hash opnemen??
+        omvang: 10, //TODO bestandsgrootte berekenen
+        volgnummer: 1,
+        voltooid: true,
+      }],
       bronorganisatie: '123456789',
-      creatiedatum: doc['zkn:creatiedatum'],
+      creatiedatum: doc['zkn:creatiedatum'].text,
       informatieobjecttype: 'https://example.com', //TODO Catalogus API referentie
       locked: false, //Placeholder
-      taal: this.mapLanguage(doc['zkn:taal']),
-      titel: doc['zkn:titel'],
+      taal: this.mapLanguage(doc['zkn:taal'].text),
+      titel: doc['zkn:titel'].text,
       versie: 1, //Placeholder
+      bestandsnaam: doc['zkn:inhoud']['stuf:bestandsnaam'],
+      beschrijving: doc['zkn:dct.omschrijving'].text,
     };
     return EnkelvoudigInformatieObjectSchema.parse(enkelvoudigInformatieObject);
   }
