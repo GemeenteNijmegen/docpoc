@@ -106,6 +106,9 @@ export class ApiStack extends Stack {
     const apiKey = new ApiKey(this, 'api-key');
     plan.addApiKey(apiKey);
     plan.node.addDependency(apiKey);
+    plan.addApiStage({
+      stage: this.api.deploymentStage,
+    });
   }
 
 
