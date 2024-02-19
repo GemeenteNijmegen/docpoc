@@ -34,6 +34,7 @@ export class ApiStack extends Stack {
       domainName: `api.${subdomain.zoneName}`,
       certificate: this.certificate(subdomain),
     });
+    this.setupDnsRecords(subdomain);
 
   }
 
