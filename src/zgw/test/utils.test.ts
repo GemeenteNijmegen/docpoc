@@ -1,4 +1,4 @@
-import { getFileSizeForBase64String } from '../src/zgw/utils';
+import { getFileSizeForBase64String } from '../utils';
 
 describe('Test base64 calculations', () => {
   test('Decoding a known file size', async() => {

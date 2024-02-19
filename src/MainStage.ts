@@ -1,4 +1,5 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
+<<<<<<< HEAD
 import { Aspects, Stack, StackProps, Stage } from 'aws-cdk-lib';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
@@ -6,6 +7,13 @@ import { Construct } from 'constructs';
 import { ApiStack } from './ApiStack';
 import { Configurable } from './Configuration';
 import { Statics } from './Statics';
+=======
+import { Aspects, StackProps, Stage } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import { ApiStack } from './ApiStack';
+import { Configurable } from './Configuration';
+import { ParameterStack } from './ParameterStack';
+>>>>>>> da27f67f7bf5a4ecbe6ff28bdb516249babd8477
 
 export interface MainStageProps extends StackProps, Configurable {}
 
@@ -25,6 +33,7 @@ export class MainStage extends Stage {
 
   }
 }
+<<<<<<< HEAD
 
 class ParameterStack extends Stack {
   constructor(scope: Construct, id: string) {
@@ -46,3 +55,5 @@ class ParameterStack extends Stack {
     });
   }
 }
+=======
+>>>>>>> da27f67f7bf5a4ecbe6ff28bdb516249babd8477

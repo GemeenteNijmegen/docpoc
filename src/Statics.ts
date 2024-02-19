@@ -26,8 +26,8 @@ export abstract class Statics {
   static readonly ssmMTLSClientCert: string = `/cdk/${this.projectName}/mtls-clientcert`;
 
   /**
-     * Root CA for mTLS (PKIO root)
-     */
+   * Root CA for mTLS (PKIO root)
+   */
   static readonly ssmMTLSRootCA: string = `/cdk/${this.projectName}/mtls-rootca`;
 
 }
