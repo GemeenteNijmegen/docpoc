@@ -3,7 +3,7 @@ import { CorsaClient } from './CorsaClient';
 import { EnkelvoudigInformatieObject, EnkelvoudigInformatieObjectSchema } from './EnkelvoudigInformatieObjectSchema';
 import { ObjectInformatieObject } from './ObjectInformatieObject';
 import { OpenZaakClient } from './OpenZaakClient';
-import { getFileSizeForBase64String } from '../utils';
+import { getFileSizeForBase64String } from './utils';
 import { ZaakDocument, ZaakDocumenten } from './ZaakDocument';
 /**
  * This class orchestrates the communication between, and translation to/from the zaakDMS implementation
