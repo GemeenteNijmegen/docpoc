@@ -6,7 +6,7 @@ import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
-import { EnkelvoudiginformatieobjectenFunction } from './lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten-function';
+import { ObjectinformatiobjectenFunction } from './lambdas/objectinformatieobjecten/objectinformatiobjecten-function';
 import { Statics } from './Statics';
 
 export interface ApiStackProps extends StackProps, Configurable {}
@@ -84,8 +84,11 @@ export class ApiStack extends Stack {
 
     const enkelvoudiginformatieobjecten = apiResource.addResource('enkelvoudiginformatieobjecten');
 
-    const lambda = new EnkelvoudiginformatieobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
+    const lambda = new ObjectinformatiobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
       description: 'ZGW enkelvoudiginformatieobjecten endpoint implementation',
+      environment: {
+        OPENZAAK_BASE_URL: 'https://example.com',
+      },
     });
 
     enkelvoudiginformatieobjecten.addMethod('GET', new LambdaIntegration(lambda), {
