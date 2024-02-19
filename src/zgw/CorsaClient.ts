@@ -1,8 +1,9 @@
 import { UUID } from 'crypto';
-import * as fs from 'fs';
-import * as path from 'path';
 import { XMLParser } from 'fast-xml-parser';
 import { ZaakDocument, ZaakDocumentSchema, ZaakDocumenten, ZaakDocumentenSchema } from './ZaakDocument';
+
+import * as geefLijstZaakdocumenten from '../../test/samples/geefLijstZaakdocumenten_Lv01.xml';
+import * as geefZaakDocument from '../../test/samples/geefZaakdocumentLezen_Lv0.xml';
 
 export class CorsaClient {
   parser: XMLParser;
@@ -16,19 +17,17 @@ export class CorsaClient {
   }
 
   geefLijstZaakDocumenten(_corsaZaakUuid: UUID): ZaakDocumenten {
-    const file = fs.readFileSync(path.resolve(__dirname, '../../test/samples/geefLijstZaakdocumenten_Lv01.xml'));
-    const docs = this.parseZaakDocumenten(file);
+    const docs = this.parseZaakDocumenten(geefLijstZaakdocumenten.default);
     return docs;
   }
 
 
   geefZaakDocument(_corsaDocumentUuid: UUID) {
-    const file = fs.readFileSync(path.resolve(__dirname, '../../test/samples/geefZaakDocumentLezen_Lv0.xml'));
-    return this.parseZaakDocument(file.toString('utf-8'));
+    return this.parseZaakDocument(geefZaakDocument.default);
   }
 
-  private parseZaakDocumenten(file: Buffer) {
-    const json = this.parser.parse(file.toString('utf-8'));
+  private parseZaakDocumenten(xml: string) {
+    const json = this.parser.parse(xml);
     const docs = ZaakDocumentenSchema.parse(json['soap:Envelope']['soap:Body']['zkn:zakLa01']['zkn:antwoord']['zkn:object']['zkn:heeftRelevant']);
     return docs;
   }
