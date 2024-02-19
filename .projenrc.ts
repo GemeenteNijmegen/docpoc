@@ -4,12 +4,12 @@ const project = new GemeenteNijmegenCdkApp({
   defaultReleaseBranch: 'main',
   devDeps: [
     '@gemeentenijmegen/projen-project-type',
-    '@gemeentenijmegen/aws-constructs',
     '@types/jsonwebtoken',
   ],
   name: 'docpoc',
   projenrcTs: true,
   deps: [
+    '@gemeentenijmegen/aws-constructs',
     'zod',
     'fast-xml-parser',
     'jsonwebtoken',

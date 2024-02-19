@@ -2,8 +2,8 @@ import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
 import { Stack, StackProps, Tags, pipelines, Aspects } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
-import { Statics } from './Statics';
 import { MainStage } from './MainStage';
+import { Statics } from './Statics';
 
 export interface PipelineStackProps extends StackProps, Configurable {}
 
@@ -33,14 +33,14 @@ export class PipelineStack extends Stack {
     pipeline.addStage(new MainStage(this, 'docpoc', {
       env: props.configuration.deployToEnvironment,
       configuration: props.configuration,
-    }))
+    }));
 
   }
 
   /**
    * Sets up the pipeline given the source
-   * @param source 
-   * @returns 
+   * @param source
+   * @returns
    */
   private pipeline(source: pipelines.CodePipelineSource): pipelines.CodePipeline {
     const synthStep = new pipelines.ShellStep('Synth', {
