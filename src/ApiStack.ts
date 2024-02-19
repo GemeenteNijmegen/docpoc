@@ -3,6 +3,7 @@ import { ApiKey, LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-ap
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { ARecord, HostedZone, NsRecord, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
@@ -85,11 +86,19 @@ export class ApiStack extends Stack {
   setupEnkelvoudiginformatieobjecten(apiResource: Resource) {
 
     const enkelvoudiginformatieobjecten = apiResource.addResource('enkelvoudiginformatieobjecten');
+    const jwtSecret = Secret.fromSecretNameV2(this, 'jwt-token-secret', Statics.openzaakJwtSecret);
+    const secretMTLSPrivateKey = Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
 
     const lambda = new ObjectinformatiobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
       description: 'ZGW enkelvoudiginformatieobjecten endpoint implementation',
       environment: {
-        OPENZAAK_BASE_URL: 'https://example.com',
+        OPENZAAK_JWT_SECRET_ARN: jwtSecret.secretArn,
+        OPENZAAK_JWT_USER_ID: StringParameter.valueForStringParameter(this, Statics.ssmUserId),
+        OPENZAAK_JWT_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmClientId),
+        OPENZAAK_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmBaseUrl),
+        MTLS_CLIENT_CERT_NAME: StringParameter.valueForStringParameter(this, Statics.ssmMTLSClientCert),
+        MTLS_ROOT_CA_NAME: StringParameter.valueForStringParameter(this, Statics.ssmMTLSRootCA),
+        MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
       },
     });
 

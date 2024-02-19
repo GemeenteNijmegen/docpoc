@@ -18,9 +18,30 @@ export class ParameterStack extends Stack {
       parameterName: Statics.ssmMTLSRootCA,
     });
 
+    new Secret(this, 'secret_1', {
+      secretName: Statics.openzaakJwtSecret,
+      description: 'Openzaak token secret',
+    });
+
     new Secret(this, 'secret_2', {
       secretName: Statics.secretMTLSPrivateKey,
       description: 'mTLS certificate private key',
     });
+
+    new StringParameter(this, 'ssm_zaken_1', {
+      stringValue: '-',
+      parameterName: Statics.ssmUserId,
+    });
+
+    new StringParameter(this, 'ssm_zaken_2', {
+      stringValue: '-',
+      parameterName: Statics.ssmBaseUrl,
+    });
+
+    new StringParameter(this, 'ssm_zaken_3', {
+      stringValue: '-',
+      parameterName: Statics.ssmClientId,
+    });
+
   }
 }

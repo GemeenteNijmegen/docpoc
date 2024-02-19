@@ -18,16 +18,35 @@ export abstract class Statics {
   /**
    * Certificate private key for mTLS
    */
-  static readonly secretMTLSPrivateKey: string = `/cdk/${this.projectName}/mtls-privatekey`;
+  static readonly secretMTLSPrivateKey: string = `/${this.projectName}/mtls-privatekey`;
 
   /**
     * Certificate for mTLS
     */
-  static readonly ssmMTLSClientCert: string = `/cdk/${this.projectName}/mtls-clientcert`;
+  static readonly ssmMTLSClientCert: string = `/${this.projectName}/mtls-clientcert`;
 
   /**
    * Root CA for mTLS (PKIO root)
    */
-  static readonly ssmMTLSRootCA: string = `/cdk/${this.projectName}/mtls-rootca`;
+  static readonly ssmMTLSRootCA: string = `/${this.projectName}/mtls-rootca`;
 
+  /**
+   * jwt secret for Open zaak
+   */
+  static readonly openzaakJwtSecret: string = `/${this.projectName}/openzaak-jwt-secret`;
+
+  /**
+   * UserID for JWT Open zaak
+   */
+  static readonly ssmUserId: string = `/${this.projectName}/openzaak-jwt-userid`;
+
+  /**
+   * ClientId for JWT Open zaak
+   */
+  static readonly ssmClientId: string = `/${this.projectName}/openzaak-jwt-clientid`;
+
+  /**
+   * baseurl for open zaak
+   */
+  static readonly ssmBaseUrl: string = `/${this.projectName}/openzaak-baseurl`;
 }
