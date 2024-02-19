@@ -1,7 +1,7 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { ApiKey, LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
-import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { ARecord, HostedZone, NsRecord, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
@@ -31,7 +31,7 @@ export class ApiStack extends Stack {
     // Add subdomain
     const subdomain = this.subdomain();
     this.api.addDomainName('subdomain', {
-      domainName: `${subdomain.zoneName}`,
+      domainName: `api.${subdomain.zoneName}`,
       certificate: this.certificate(subdomain),
     });
 
@@ -66,6 +66,16 @@ export class ApiStack extends Stack {
     const zone = new HostedZone(this, 'hostedzone', {
       zoneName: `${Statics.subdomain}.${accountRootZone.zoneName}`,
     });
+
+    // Register current hosted zone in account
+    if (!zone.hostedZoneNameServers) {
+      throw Error('Expected nameservers to be set');
+    }
+    new NsRecord(this, 'ns-record', {
+      zone: accountRootZone,
+      values: zone.hostedZoneNameServers,
+    });
+
     return zone;
   }
 
