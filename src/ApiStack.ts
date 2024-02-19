@@ -31,7 +31,7 @@ export class ApiStack extends Stack {
     // Add subdomain
     const subdomain = this.subdomain();
     this.api.addDomainName('subdomain', {
-      domainName: `${subdomain.zoneName}`,
+      domainName: `api.${subdomain.zoneName}`,
       certificate: this.certificate(subdomain),
     });
 
