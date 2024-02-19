@@ -73,6 +73,7 @@ export class ApiStack extends Stack {
     }
     new NsRecord(this, 'ns-record', {
       zone: accountRootZone,
+      recordName: zone.zoneName,
       values: zone.hostedZoneNameServers,
     });
 
