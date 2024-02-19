@@ -1,5 +1,5 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
-import { LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { ApiKey, LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
 import { EnkelvoudiginformatieobjectenFunction } from './lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten-function';
@@ -21,9 +21,12 @@ export class ApiStack extends Stack {
     const v1 = api.addResource('v1');
     this.setupEnkelvoudiginformatieobjecten(v1);
 
+    this.setupApiKey();
+
   }
 
-  setupEnkelvoudiginformatieobjecten(apiResource: Resource){
+
+  setupEnkelvoudiginformatieobjecten(apiResource: Resource) {
 
     const enkelvoudiginformatieobjecten = apiResource.addResource('enkelvoudiginformatieobjecten');
 
@@ -33,8 +36,17 @@ export class ApiStack extends Stack {
 
     enkelvoudiginformatieobjecten.addMethod('GET', new LambdaIntegration(lambda), {
       apiKeyRequired: true,
-    })
+    });
 
+  }
+
+  setupApiKey() {
+    const plan = this.api.addUsagePlan('default-usage-plan', {
+      description: 'Default usage plan with API key',
+    });
+    const apiKey = new ApiKey(this, 'api-key');
+    plan.addApiKey(apiKey);
+    plan.node.addDependency(apiKey);
   }
 
 
