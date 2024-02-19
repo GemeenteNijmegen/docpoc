@@ -1,8 +1,6 @@
-
+import * as path from 'path';
 test('Infra', () => {
-  // const app = new App();
-  // const stack = new MyStack(app, 'test');
 
-  // const template = Template.fromStack(stack);
-  // expect(template.toJSON()).toMatchSnapshot();
+  console.log(path.resolve(path.basename(__dirname)))
+
 });
