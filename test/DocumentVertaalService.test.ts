@@ -1,8 +1,7 @@
 import { randomUUID } from 'crypto';
-import * as fs from 'fs';
-import * as path from 'path';
 import * as zaak from './samples/zaak.json';
-import { DocumentVertaalService, GeefLijstZaakDocumentenMapper, GeefZaakDocumentMapper } from '../src/DocumentVertaalService';
+import { CorsaClient } from '../src/CorsaClient';
+import { DocumentVertaalService, GeefLijstZaakDocumentenMapper } from '../src/DocumentVertaalService';
 import { OpenZaakClient } from '../src/OpenZaakClient';
 
 jest.mock('../src/OpenZaakClient', () => {
@@ -19,9 +18,10 @@ jest.mock('../src/OpenZaakClient', () => {
 
 describe('Map objectInformatieObjecten calls to zaakDMS', () => {
   test('Parse geefLijstZaakDocumenten to return UUIDs', async() => {
-    const file = fs.readFileSync(path.join(__dirname, 'samples', 'geefLijstZaakdocumenten_Lv01.xml'));
+    const client = new CorsaClient();
+    const docs = client.geefLijstZaakDocumenten(randomUUID());
     const mapper = new GeefLijstZaakDocumentenMapper();
-    expect(mapper.map(file.toString('utf-8'))).toEqual([
+    expect(mapper.map(docs)).toEqual([
       '6ffa451a-a340-403d-9af3-0e547add9c22',
       '11bbe6ff-d946-4ef6-aab4-0775c025b151',
       'ad20701c-cc99-4597-a976-7c707105d9ab',

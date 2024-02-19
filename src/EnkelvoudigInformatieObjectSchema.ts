@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const EnkelvoudigInformatieObjectSchema = z.object({
   url: z.string().url(),
   bronorganisatie: z.string().max(9),
-  creatiedatum: z.coerce.date(),
+  creatiedatum: z.string(),
   titel: z.string().max(200),
   auteur: z.string().max(200),
   taal: z.string().length(3),
