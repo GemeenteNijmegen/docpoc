@@ -1,11 +1,10 @@
 import { UUID, randomUUID } from 'crypto';
-import { XMLParser } from 'fast-xml-parser';
 import { CorsaClient } from './CorsaClient';
 import { EnkelvoudigInformatieObject, EnkelvoudigInformatieObjectSchema } from './EnkelvoudigInformatieObjectSchema';
 import { ObjectInformatieObject } from './ObjectInformatieObject';
 import { OpenZaakClient } from './OpenZaakClient';
 import { getFileSizeForBase64String } from './utils';
-import { ZaakDocumentenSchema } from './ZaakDocumentenSchema';
+import { ZaakDocument, ZaakDocumenten } from './ZaakDocument';
 /**
  * This class orchestrates the communication between, and translation to/from the zaakDMS implementation
  * and the ZGW implementation. It should partially implement the Document API. For now, the
@@ -23,8 +22,8 @@ export class DocumentVertaalService {
     const corsaZaakUUID = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk.bron == 'Corsa_Id').kenmerk;
 
     // Call ZaakDMS-endpoint with corsa UUID
-    const documentXMLFromCorsa = new CorsaClient().geefLijstZaakDocumenten(corsaZaakUUID);
-    const corsaDocumentUUIDs = new GeefLijstZaakDocumentenMapper().map(documentXMLFromCorsa);
+    const zaakDocumenten = new CorsaClient().geefLijstZaakDocumenten(corsaZaakUUID);
+    const corsaDocumentUUIDs = new GeefLijstZaakDocumentenMapper().map(zaakDocumenten);
 
     // Transform response to objectInformatieObjecten response
     const objects = this.mapUUIDsToObjectInformatieObjecten(corsaZaakUUID, corsaDocumentUUIDs);
@@ -35,14 +34,25 @@ export class DocumentVertaalService {
 
   async getEnkelVoudigInformatieObject(objectUrlString: string): Promise<EnkelvoudigInformatieObject> {
     // Get document from Corsa based on provided UUID (last path part in call)
-    const objectUrl = new URL(objectUrlString);
-    const uuid = objectUrl.pathname.split('/').pop() as UUID;
+    const uuid = this.uuidFromUrlString(objectUrlString);
     const documentDetails = new CorsaClient().geefZaakDocument(uuid);
 
     // Transform response to enkelvoudigInformatieObject object
     const enkelvoudigInformatieObject = new GeefZaakDocumentMapper().map(documentDetails);
     // Return object
     return EnkelvoudigInformatieObjectSchema.parse(enkelvoudigInformatieObject);
+  }
+
+  async downloadEnkelVoudigInformatieObject(objectUrlString: string): Promise<any> {
+    const uuid = this.uuidFromUrlString(objectUrlString);
+    const documentDetails = new CorsaClient().geefZaakDocument(uuid);
+    return Buffer.from(documentDetails['zkn:inhoud'].text);
+  }
+
+  private uuidFromUrlString(objectUrlString: string) {
+    const objectUrl = new URL(objectUrlString);
+    const uuid = objectUrl.pathname.split('/').pop() as UUID;
+    return uuid;
   }
 
   mapUUIDsToObjectInformatieObjecten(zaakId: UUID, uuids: UUID[]): ObjectInformatieObject[] {
@@ -61,33 +71,14 @@ export class DocumentVertaalService {
 }
 
 export class GeefLijstZaakDocumentenMapper {
-  parser: XMLParser;
-  constructor() {
-    this.parser = new XMLParser();
-  }
-
-  map(xml: string): UUID[] {
-    const json = this.parser.parse(xml);
-    const docs = ZaakDocumentenSchema.parse(json['soap:Envelope']['soap:Body']['zkn:zakLa01']['zkn:antwoord']['zkn:object']['zkn:heeftRelevant']);
-    const results = docs.map((doc: any) => doc['zkn:gerelateerde']['zkn:identificatie']);
+  map(docs: ZaakDocumenten): UUID[] {
+    const results = docs.map((doc: any) => doc['zkn:gerelateerde']['zkn:identificatie'].text);
     return results;
   }
 }
 
 export class GeefZaakDocumentMapper {
-  parser: XMLParser;
-  constructor() {
-    this.parser = new XMLParser({
-      ignoreAttributes: false,
-      alwaysCreateTextNode: true,
-      textNodeName: 'text',
-      attributeNamePrefix: '',
-    });
-  }
-
-  map(xml: string): EnkelvoudigInformatieObject {
-    const json = this.parser.parse(xml);
-    const doc = json['soap:Envelope']['soap:Body']['zkn:edcLa01']['zkn:antwoord']['zkn:object'];
+  map(doc: ZaakDocument): EnkelvoudigInformatieObject {
     const enkelvoudigInformatieObject: EnkelvoudigInformatieObject = {
       url: `https://example/com/api/v1/documenten/${doc['zkn:identificatie'].text}`,
       auteur: doc['zkn:auteur'].text,
@@ -100,7 +91,7 @@ export class GeefZaakDocumentMapper {
         voltooid: true,
       }],
       bronorganisatie: '123456789',
-      creatiedatum: doc['zkn:creatiedatum'].text,
+      creatiedatum: this.mapDate(doc['zkn:creatiedatum'].text),
       informatieobjecttype: 'https://example.com', //TODO Catalogus API referentie
       locked: false, //Placeholder
       taal: this.mapLanguage(doc['zkn:taal'].text),
@@ -121,7 +112,7 @@ export class GeefZaakDocumentMapper {
     };
   }
 
-  mapDate(yyyymmdd: string|number) {
+  mapDate(yyyymmdd: any) {
     const dateString = yyyymmdd.toString();
     const year = Number(dateString.substring(0, 4));
     const month = Number(dateString.substring(4, 6));
