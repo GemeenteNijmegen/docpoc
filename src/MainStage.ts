@@ -3,6 +3,9 @@ import { Construct } from 'constructs';
 import { ApiStack } from './ApiStack';
 import { Configurable } from './Configuration';
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { Statics } from './Statics';
 
 export interface MainStageProps extends StackProps, Configurable {}
 
@@ -12,10 +15,13 @@ export class MainStage extends Stage {
 
     Aspects.of(this).add(new PermissionsBoundaryAspect());
 
+    const paramStack = new ParameterStack(this, 'params');
 
-    new ApiStack(this, 'api', {
+    const apiStack = new ApiStack(this, 'api', {
       configuration: props.configuration,
     });
+
+    apiStack.addDependency(paramStack);
 
 
   }
@@ -25,5 +31,19 @@ class ParameterStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
     
+    new StringParameter(this, 'ssm_uitkering_2', {
+      stringValue: '-',
+      parameterName: Statics.ssmMTLSClientCert,
+    });
+
+    new StringParameter(this, 'ssm_uitkering_3', {
+      stringValue: '-',
+      parameterName: Statics.ssmMTLSRootCA,
+    });
+
+    new Secret(this, 'secret_2', {
+      secretName: Statics.secretMTLSPrivateKey,
+      description: 'mTLS certificate private key',
+    });
   }
 }

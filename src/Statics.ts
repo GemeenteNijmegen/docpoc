@@ -15,4 +15,19 @@ export abstract class Statics {
     region: 'eu-central-1',
   };
 
+   /**
+   * Certificate private key for mTLS
+   */
+   static readonly secretMTLSPrivateKey: string = '/cdk/mijn-nijmegen/mtls-privatekey';
+
+   /**
+    * Certificate for mTLS
+    */
+   static readonly ssmMTLSClientCert: string = '/cdk/mijn-nijmegen/mtls-clientcert';
+ 
+   /**
+     * Root CA for mTLS (PKIO root)
+     */
+   static readonly ssmMTLSRootCA: string = '/cdk/mijn-nijmegen/mtls-rootca';
+ 
 }
