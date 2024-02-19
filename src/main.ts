@@ -1,23 +1,28 @@
-import { App, Stack, StackProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import { App } from 'aws-cdk-lib';
+import { getConfiguration } from './Configuration';
+import { PipelineStack } from './PipelineStack';
 
-export class MyStack extends Stack {
-  constructor(scope: Construct, id: string, props: StackProps = {}) {
-    super(scope, id, props);
 
-    // define resources here...
-  }
-}
-
-// for development, use account/region from cdk cli
-const devEnv = {
-  account: process.env.CDK_DEFAULT_ACCOUNT,
-  region: process.env.CDK_DEFAULT_REGION,
-};
+const branchToBuild = getBranchToBuild();
+console.log('Building branch', branchToBuild);
+const configuration = getConfiguration(branchToBuild);
 
 const app = new App();
 
-new MyStack(app, 'docpoc-dev', { env: devEnv });
-// new MyStack(app, 'docpoc-prod', { env: prodEnv });
+new PipelineStack(app, `docpoc-pipeline-${configuration.branchName}`, {
+  env: configuration.buildEnvironment,
+  configuration: configuration,
+});
 
 app.synth();
+
+/**
+ * Find the branch name of the branch to build
+ * @returns
+ */
+function getBranchToBuild() {
+  if (process.env.BRANCH_NAME) {
+    return process.env.BRANCH_NAME;
+  }
+  return 'sandbox';
+}
