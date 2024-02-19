@@ -9,7 +9,7 @@ export class CorsaClient {
   }
 
   geefZaakDocument(_corsaDocumentUuid: UUID) {
-    const file = fs.readFileSync(path.join(__dirname, '../test/samples/geefZaakDocumentLezen_Lv0.xml'));
+    const file = fs.readFileSync(path.join(__dirname, '../../test/samples/geefZaakDocumentLezen_Lv0.xml'));
     return file.toString('utf-8');
   }
 }

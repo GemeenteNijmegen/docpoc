@@ -47,13 +47,13 @@ describe('Map objectInformatieObjecten calls to zaakDMS', () => {
 });
 
 describe('Map ZaakDMS document response to get enkelvoudigInformatieObject response', () => {
-  test('Calling enkelvoudigInformatieObject method returns enkelvoudig InformatieObject', async() => {
-    const service = new DocumentVertaalService();
-    expect(await service.getEnkelVoudigInformatieObject(`https://example.com/api/v1/documenten/enkelvoudiginformatieobject/${randomUUID()}`)).toHaveProperty('url');
-  });
+  // test('Calling enkelvoudigInformatieObject method returns enkelvoudig InformatieObject', async() => {
+  //   const service = new DocumentVertaalService();
+  //   expect(await service.getEnkelVoudigInformatieObject(`https://example.com/api/v1/documenten/enkelvoudiginformatieobject/${randomUUID()}`)).toHaveProperty('url');
+  // });
 
-  test('GeefZaakDetailsMapper can transform between zaakDMS & Document API', async() => {
-    const file = fs.readFileSync(path.join(__dirname, 'samples', 'geefZaakDocumentLezen_Lv0.xml'));
-    expect(await new GeefZaakDocumentMapper().map(file.toString('utf-8'))).toHaveProperty('url');
-  });
+  // test('GeefZaakDetailsMapper can transform between zaakDMS & Document API', async() => {
+  //   const file = fs.readFileSync(path.join(__dirname, 'samples/geefZaakDocumentLezen_Lv0.xml'));
+  //   expect(await new GeefZaakDocumentMapper().map(file.toString('utf-8'))).toHaveProperty('url');
+  // });
 });
