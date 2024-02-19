@@ -22,7 +22,7 @@ export class CorsaClient {
   }
 
   geefLijstZaakDocumenten(_corsaZaakUuid: UUID): ZaakDocumenten {
-    const file = fs.readFileSync(path.resolve(__dirname, '../test/samples/geefLijstZaakdocumenten_Lv01.xml'));
+    const file = fs.readFileSync(path.resolve(__dirname, '../../test/samples/geefLijstZaakdocumenten_Lv01.xml'));
     const json = this.parser.parse(file.toString('utf-8'));
     console.debug('te3', json['soap:Envelope']['soap:Body']['zkn:zakLa01']['zkn:antwoord']['zkn:object']['zkn:heeftRelevant']);
     const docs = ZaakDocumentenSchema.parse(json['soap:Envelope']['soap:Body']['zkn:zakLa01']['zkn:antwoord']['zkn:object']['zkn:heeftRelevant']);
@@ -30,7 +30,7 @@ export class CorsaClient {
   }
 
   geefZaakDocument(_corsaDocumentUuid: UUID) {
-    const file = fs.readFileSync(path.resolve(__dirname, '../test/samples/geefZaakDocumentLezen_Lv0.xml'));
+    const file = fs.readFileSync(path.resolve(__dirname, '../../test/samples/geefZaakDocumentLezen_Lv0.xml'));
     return this.parseZaakDocument(file.toString('utf-8'));
   }
 }

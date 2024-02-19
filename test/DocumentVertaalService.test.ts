@@ -1,10 +1,10 @@
 import { randomUUID } from 'crypto';
 import * as zaak from './samples/zaak.json';
-import { CorsaClient } from '../src/CorsaClient';
-import { DocumentVertaalService, GeefLijstZaakDocumentenMapper } from '../src/DocumentVertaalService';
-import { OpenZaakClient } from '../src/OpenZaakClient';
+import { CorsaClient } from '../src/zgw/CorsaClient';
+import { DocumentVertaalService, GeefLijstZaakDocumentenMapper } from '../src/zgw/DocumentVertaalService';
+import { OpenZaakClient } from '../src/zgw/OpenZaakClient';
 
-jest.mock('../src/OpenZaakClient', () => {
+jest.mock('../src/zgw/OpenZaakClient', () => {
   return {
     OpenZaakClient: jest.fn(() => {
       return {
