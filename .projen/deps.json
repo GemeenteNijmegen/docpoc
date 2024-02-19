@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@gemeentenijmegen/aws-constructs",
+      "type": "build"
+    },
+    {
       "name": "@gemeentenijmegen/projen-project-type",
       "type": "build"
     },
