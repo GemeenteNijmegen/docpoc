@@ -4,6 +4,7 @@ import { CorsaClient } from './CorsaClient';
 import { EnkelvoudigInformatieObject, EnkelvoudigInformatieObjectSchema } from './EnkelvoudigInformatieObjectSchema';
 import { ObjectInformatieObject } from './ObjectInformatieObject';
 import { OpenZaakClient } from './OpenZaakClient';
+import { getFileSizeForBase64String } from './utils';
 import { ZaakDocumentenSchema } from './ZaakDocumentenSchema';
 /**
  * This class orchestrates the communication between, and translation to/from the zaakDMS implementation
@@ -94,7 +95,7 @@ export class GeefZaakDocumentMapper {
       bestandsdelen: [{
         url: `https://example.com/api/v1/documenten/enkelvoudiginformatieobjecten/${randomUUID()}/download`,
         lock: 'randomzogenaamdehash', //TODO hash opnemen??
-        omvang: 10, //TODO bestandsgrootte berekenen
+        omvang: getFileSizeForBase64String(doc['zkn:inhoud'].text),
         volgnummer: 1,
         voltooid: true,
       }],
@@ -108,6 +109,7 @@ export class GeefZaakDocumentMapper {
       bestandsnaam: doc['zkn:inhoud']['stuf:bestandsnaam'],
       beschrijving: doc['zkn:dct.omschrijving'].text,
     };
+    console.debug(enkelvoudigInformatieObject);
     return EnkelvoudigInformatieObjectSchema.parse(enkelvoudigInformatieObject);
   }
 
