@@ -5,10 +5,12 @@ const project = new GemeenteNijmegenCdkApp({
   devDeps: [
     '@gemeentenijmegen/projen-project-type',
     '@types/jsonwebtoken',
+    '@types/aws-lambda',
   ],
   name: 'docpoc',
   projenrcTs: true,
   deps: [
+    '@gemeentenijmegen/aws-constructs',
     'zod',
     'fast-xml-parser',
     'jsonwebtoken',

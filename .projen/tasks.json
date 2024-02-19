@@ -43,7 +43,30 @@
     },
     "bundle": {
       "name": "bundle",
-      "description": "Prepare assets"
+      "description": "Prepare assets",
+      "steps": [
+        {
+          "spawn": "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda"
+        }
+      ]
+    },
+    "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda": {
+      "name": "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda",
+      "description": "Create a JavaScript bundle from src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
+        }
+      ]
+    },
+    "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda:watch": {
+      "name": "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
+        }
+      ]
     },
     "clobber": {
       "name": "clobber",
@@ -277,13 +300,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@gemeentenijmegen/projen-project-type,@types/jest,@types/jsonwebtoken,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,projen,ts-jest,ts-node,typescript,axios,fast-xml-parser,jsonwebtoken,zod"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@gemeentenijmegen/projen-project-type,@types/aws-lambda,@types/jest,@types/jsonwebtoken,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,projen,ts-jest,ts-node,typescript,@gemeentenijmegen/aws-constructs,axios,fast-xml-parser,jsonwebtoken,zod"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @gemeentenijmegen/projen-project-type @types/jest @types/jsonwebtoken @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit projen standard-version ts-jest ts-node typescript aws-cdk-lib axios constructs fast-xml-parser jsonwebtoken zod"
+          "exec": "yarn upgrade @gemeentenijmegen/projen-project-type @types/aws-lambda @types/jest @types/jsonwebtoken @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit projen standard-version ts-jest ts-node typescript @gemeentenijmegen/aws-constructs aws-cdk-lib axios constructs fast-xml-parser jsonwebtoken zod"
         },
         {
           "exec": "npx projen"
