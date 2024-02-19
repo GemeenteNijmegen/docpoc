@@ -53,7 +53,7 @@ describe('Map ZaakDMS document response to get enkelvoudigInformatieObject respo
   });
 
   test('GeefZaakDetailsMapper can transform between zaakDMS & Document API', async() => {
-    const file = fs.readFileSync(path.resolve(__dirname, './samples/geefZaakDocumentLezen_Lv0.xml'));
+    const file = fs.readFileSync(path.resolve(__dirname, 'samples/geefZaakDocumentLezen_Lv0.xml'));
     expect(await new GeefZaakDocumentMapper().map(file.toString('utf-8'))).toHaveProperty('url');
   });
 });
