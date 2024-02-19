@@ -1,9 +1,9 @@
 import { PermissionsBoundaryAspect } from '@gemeentenijmegen/aws-constructs';
-import { Stack, StackProps, Tags, pipelines, CfnParameter, Aspects } from 'aws-cdk-lib';
-import { ShellStep } from 'aws-cdk-lib/pipelines';
+import { Stack, StackProps, Tags, pipelines, Aspects } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
 import { Statics } from './Statics';
+import { MainStage } from './MainStage';
 
 export interface PipelineStackProps extends StackProps, Configurable {}
 
@@ -24,21 +24,25 @@ export class PipelineStack extends Stack {
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
     Aspects.of(this).add(new PermissionsBoundaryAspect());
-    this.branchName = props.configuration.branch;
+    this.branchName = props.configuration.branchName;
 
-    /** On first deploy, providing a connectionArn param to `cdk deploy` is required, so the
-     * codestarconnection can be setup. This connection is responsible for further deploys
-     * triggering from a commit to the specified branch on Github.
-     */
-    const connectionArn = new CfnParameter(this, 'connectionArn');
-    const source = this.connectionSource(connectionArn);
+    const source = this.connectionSource(props.configuration.codeStarConnectionArn);
 
-    const pipeline = this.pipeline(source, props);
+    const pipeline = this.pipeline(source);
 
+    pipeline.addStage(new MainStage(this, 'docpoc', {
+      env: props.configuration.deployToEnvironment,
+      configuration: props.configuration,
+    }))
 
   }
 
-  pipeline(source: pipelines.CodePipelineSource, props: PipelineStackProps): pipelines.CodePipeline {
+  /**
+   * Sets up the pipeline given the source
+   * @param source 
+   * @returns 
+   */
+  private pipeline(source: pipelines.CodePipelineSource): pipelines.CodePipeline {
     const synthStep = new pipelines.ShellStep('Synth', {
       input: source,
       env: {
@@ -51,8 +55,8 @@ export class PipelineStack extends Stack {
       ],
     });
 
-    const pipeline = new pipelines.CodePipeline(this, props.configuration.pipelineName, {
-      pipelineName: props.configuration.pipelineName,
+    const pipeline = new pipelines.CodePipeline(this, 'pipeline', {
+      pipelineName: `${Statics.projectName}-${this.branchName}-pipeline`,
       crossAccountKeys: true,
       synth: synthStep,
     });
@@ -68,9 +72,9 @@ export class PipelineStack extends Stack {
    * @param connectionArn the ARN for the codestarconnection.
    * @returns
    */
-  private connectionSource(connectionArn: CfnParameter): pipelines.CodePipelineSource {
-    return pipelines.CodePipelineSource.connection('GemeenteNijmegen/mijn-nijmegen', this.branchName, {
-      connectionArn: connectionArn.valueAsString,
+  private connectionSource(connectionArn: string): pipelines.CodePipelineSource {
+    return pipelines.CodePipelineSource.connection(Statics.repo, this.branchName, {
+      connectionArn: connectionArn,
     });
   }
 }
