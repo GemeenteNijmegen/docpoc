@@ -1,8 +1,13 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { ApiKey, LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
+import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
 import { EnkelvoudiginformatieobjectenFunction } from './lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten-function';
+import { Statics } from './Statics';
 
 export interface ApiStackProps extends StackProps, Configurable {}
 
@@ -23,6 +28,45 @@ export class ApiStack extends Stack {
 
     this.setupApiKey();
 
+    // Add subdomain
+    const subdomain = this.subdomain();
+    this.api.addDomainName('subdomain', {
+      domainName: `${subdomain.zoneName}`,
+      certificate: this.certificate(subdomain),
+    });
+
+  }
+
+  setupDnsRecords(subdomain: HostedZone) {
+    if (!this.api.domainName) {
+      throw Error('Expected domain name to be set for API gateway');
+    }
+    new ARecord(this, 'a-record', {
+      target: RecordTarget.fromAlias(new ApiGatewayDomain(this.api.domainName)),
+      zone: subdomain,
+      recordName: `api.${subdomain.zoneName}`,
+    });
+  }
+
+
+  certificate(subdomain: HostedZone) {
+    return new Certificate(this, 'cert', {
+      domainName: `api.${subdomain.zoneName}`,
+      validation: CertificateValidation.fromDns(subdomain),
+    });
+  }
+
+  subdomain() {
+    const rootZoneId = StringParameter.valueForStringParameter(this, Statics.ssmAccountRootHostedZoneId);
+    const rootZoneName = StringParameter.valueForStringParameter(this, Statics.ssmAccountRootHostedZoneName);
+    const accountRootZone = HostedZone.fromHostedZoneAttributes(this, 'cspzone', {
+      hostedZoneId: rootZoneId,
+      zoneName: rootZoneName,
+    });
+    const zone = new HostedZone(this, 'hostedzone', {
+      zoneName: `${Statics.subdomain}.${accountRootZone.zoneName}`,
+    });
+    return zone;
   }
 
 
