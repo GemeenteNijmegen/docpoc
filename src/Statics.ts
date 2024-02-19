@@ -18,16 +18,16 @@ export abstract class Statics {
   /**
    * Certificate private key for mTLS
    */
-  static readonly secretMTLSPrivateKey: string = '/cdk/mijn-nijmegen/mtls-privatekey';
+  static readonly secretMTLSPrivateKey: string = `/cdk/${this.projectName}/mtls-privatekey`;
 
   /**
     * Certificate for mTLS
     */
-  static readonly ssmMTLSClientCert: string = '/cdk/mijn-nijmegen/mtls-clientcert';
+  static readonly ssmMTLSClientCert: string = `/cdk/${this.projectName}/mtls-clientcert`;
 
   /**
-     * Root CA for mTLS (PKIO root)
-     */
-  static readonly ssmMTLSRootCA: string = '/cdk/mijn-nijmegen/mtls-rootca';
+   * Root CA for mTLS (PKIO root)
+   */
+  static readonly ssmMTLSRootCA: string = `/cdk/${this.projectName}/mtls-rootca`;
 
 }
