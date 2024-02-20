@@ -31,12 +31,12 @@ export class ApiStack extends Stack {
     this.setupApiKey();
 
     // Add subdomain
-    const subdomain = this.subdomain();
-    this.api.addDomainName('subdomain', {
-      certificate: this.certificate(subdomain),
-      domainName: `api.${subdomain.zoneName}`,
-    });
-    this.setupDnsRecords(subdomain);
+    // const subdomain = this.subdomain();
+    // this.api.addDomainName('subdomain', {
+    //   certificate: this.certificate(subdomain),
+    //   domainName: `api.${subdomain.zoneName}`,
+    // });
+    // this.setupDnsRecords(subdomain);
 
   }
 
