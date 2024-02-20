@@ -11,7 +11,7 @@ export class ObjectInformatieObjectenHandler {
   }
 
   handleRequest(uuid: UUID) {
-    const urlString = `${this.openZaakClient.baseUrl}/${uuid}`;
+    const urlString = `${this.openZaakClient.baseUrl}zaken/api/v1/zaken/${uuid}`;
     return this.service.listObjectInformatieObjecten(urlString);
   };
 }
