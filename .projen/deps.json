@@ -88,6 +88,10 @@
       "type": "runtime"
     },
     {
+      "name": "@gemeentenijmegen/utils",
+      "type": "runtime"
+    },
+    {
       "name": "@glen/jest-raw-loader",
       "type": "runtime"
     },

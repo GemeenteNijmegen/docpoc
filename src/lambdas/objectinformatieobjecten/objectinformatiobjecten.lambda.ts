@@ -1,10 +1,21 @@
 import { UUID } from 'crypto';
+import { AWS } from '@gemeentenijmegen/utils';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { ObjectInformatieObjectenHandler } from './ObjectInformatieObjectenHandler';
+import { OpenZaakClient } from '../../zgw/OpenZaakClient';
 
-// TODO use this for mocking coras client
-// import * as geefLijstZaakdocumenten from '../../../test/samples/geefLijstZaakdocumenten_Lv01.xml';
-// import * as geefZaakDocument from '../../../test/samples/geefZaakdocumentLezen_Lv0.xml';
+let openZaakClient: OpenZaakClient | false;
+
+async function initSecret() {
+  if (!process.env.OPENZAAK_JWT_SECRET_ARN) {
+    throw Error('No secret ARN provided');
+  }
+  return {
+    openZaakSecret: await AWS.getSecret(process.env.OPENZAAK_JWT_SECRET_ARN),
+  };
+}
+
+const initPromise = initSecret();
 
 function parseParameters(event: APIGatewayProxyEvent) {
   if (!event.pathParameters?.uuid) {
@@ -16,12 +27,29 @@ function parseParameters(event: APIGatewayProxyEvent) {
 }
 
 export async function handler(event: APIGatewayProxyEvent) {
+  const secrets = await initPromise;
+  const zakenClient = sharedOpenZaakClient(secrets.openZaakSecret);
   console.debug('Event', event);
   if (!process.env.OPENZAAK_BASE_URL) {
     throw Error('No openzaak BASEURL set in process.env');
   }
   // TODO call vertaal service
   const params = parseParameters(event);
-  const requestHandler = new ObjectInformatieObjectenHandler(process.env.OPENZAAK_BASE_URL);
+  const requestHandler = new ObjectInformatieObjectenHandler(zakenClient);
   await requestHandler.handleRequest(params.uuid);
+}
+
+function sharedOpenZaakClient(secret: string): OpenZaakClient {
+  if (!openZaakClient) {
+    if (!process.env.OPENZAAK_BASE_URL) {
+      throw Error('no base url set');
+    }
+    openZaakClient = new OpenZaakClient({
+      baseUrl: new URL(process.env.OPENZAAK_BASE_URL),
+      clientId: process.env.OPENZAAK_JWT_CLIENT_ID,
+      userId: process.env.OPENZAAK_JWT_USER_ID,
+      secret,
+    });
+  }
+  return openZaakClient;
 }

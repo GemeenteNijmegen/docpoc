@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@gemeentenijmegen/aws-constructs": "^0.0.5",
+    "@gemeentenijmegen/utils": "^0.0.6",
     "@glen/jest-raw-loader": "^2.0.0",
     "aws-cdk-lib": "^2.1.0",
     "axios": "^1.6.7",

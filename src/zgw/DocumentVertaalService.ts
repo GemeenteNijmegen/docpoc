@@ -14,11 +14,14 @@ import { ZaakDocument, ZaakDocumenten } from './ZaakDocument';
  * with bron 'Corsa_Id'.
  */
 export class DocumentVertaalService {
+  private openZaakClient: OpenZaakClient;
+  constructor(openZaakClient: OpenZaakClient) {
+    this.openZaakClient = openZaakClient;
+  }
   async listObjectInformatieObjecten(zaakUrl: string): Promise<ObjectInformatieObject[]> {
 
     // Retrieve corsa ID from zaak
-    const zaakClient = new OpenZaakClient({ baseUrl: '' });
-    const sampleZaak = await zaakClient.request(zaakUrl);
+    const sampleZaak = await this.openZaakClient.request(zaakUrl);
     const corsaZaakUUID = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk.bron == 'Corsa_Id').kenmerk;
 
     // Call ZaakDMS-endpoint with corsa UUID

@@ -31,7 +31,8 @@ describe('Map objectInformatieObjecten calls to zaakDMS', () => {
   // });
 
   test('Return objectinformatieObjecten object', async() => {
-    const service = new DocumentVertaalService();
+    const client = new OpenZaakClient({ baseUrl: 'https://example.com' });
+    const service = new DocumentVertaalService(client);
     expect(await service.listObjectInformatieObjecten(randomUUID())).toHaveLength(6);
   });
 
