@@ -33,7 +33,7 @@ export abstract class Statics {
   /**
    * jwt secret for Open zaak
    */
-  static readonly openzaakJwtSecret: string = `/${this.projectName}/openzaak-jwt-secret`;
+  static readonly openzaakJwtSecret: string = `/${this.projectName}/openzaak-jwtsecret`;
 
   /**
    * UserID for JWT Open zaak
