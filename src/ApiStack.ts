@@ -85,7 +85,8 @@ export class ApiStack extends Stack {
 
   setupEnkelvoudiginformatieobjecten(apiResource: Resource) {
 
-    const enkelvoudiginformatieobjecten = apiResource.addResource('enkelvoudiginformatieobjecten');
+    const enkelvoudiginformatieobjecten = apiResource.addResource('enkelvoudiginformatieobjecten').addResource('{uuid}');
+
     const jwtSecret = Secret.fromSecretNameV2(this, 'jwt-token-secret', Statics.openzaakJwtSecret);
     const secretMTLSPrivateKey = Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
 
