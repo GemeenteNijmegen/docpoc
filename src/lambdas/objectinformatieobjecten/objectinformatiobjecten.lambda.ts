@@ -1,6 +1,6 @@
 import { UUID } from 'crypto';
 import { AWS } from '@gemeentenijmegen/utils';
-import { APIGatewayProxyEvent } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { ObjectInformatieObjectenHandler } from './ObjectInformatieObjectenHandler';
 import { OpenZaakClient } from '../../zgw/OpenZaakClient';
 
@@ -26,7 +26,7 @@ function parseParameters(event: APIGatewayProxyEvent) {
   };
 }
 
-export async function handler(event: APIGatewayProxyEvent) {
+export async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   const secrets = await initPromise;
   const zakenClient = sharedOpenZaakClient(secrets.openZaakSecret);
   console.debug('Event', event);
@@ -36,7 +36,10 @@ export async function handler(event: APIGatewayProxyEvent) {
   // TODO call vertaal service
   const params = parseParameters(event);
   const requestHandler = new ObjectInformatieObjectenHandler(zakenClient);
-  await requestHandler.handleRequest(params.uuid);
+  return {
+    body: JSON.stringify(await requestHandler.handleRequest(params.uuid)),
+    statusCode: 200,
+  };
 }
 
 function sharedOpenZaakClient(secret: string): OpenZaakClient {
