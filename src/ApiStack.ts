@@ -1,8 +1,8 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
-import { ApiKey, LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { ApiKey, DomainName, LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { ARecord, HostedZone, NsRecord, RecordTarget } from 'aws-cdk-lib/aws-route53';
-import { ApiGateway } from 'aws-cdk-lib/aws-route53-targets';
+import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
@@ -23,6 +23,7 @@ export class ApiStack extends Stack {
       description: 'DocPoc API Gateway (zgw to Zaak DMS translation service)',
     });
 
+
     const api = this.api.root.addResource('api');
     const v1 = api.addResource('v1');
     this.setupEnkelvoudiginformatieobjecten(v1);
@@ -31,20 +32,17 @@ export class ApiStack extends Stack {
 
     // Add subdomain
     const subdomain = this.subdomain();
-    this.api.addDomainName('subdomain', {
-      domainName: `api.${subdomain.zoneName}`,
+    const domainname = new DomainName(this, 'gateway-domain', {
       certificate: this.certificate(subdomain),
+      domainName: `api.${subdomain.zoneName}`,
     });
-    this.setupDnsRecords(subdomain);
+    this.setupDnsRecords(subdomain, domainname);
 
   }
 
-  setupDnsRecords(subdomain: HostedZone) {
-    if (!this.api.domainName) {
-      throw Error('Expected domain name to be set for API gateway');
-    }
+  setupDnsRecords(subdomain: HostedZone, domainname: DomainName) {
     new ARecord(this, 'a-record', {
-      target: RecordTarget.fromAlias(new ApiGateway(this.api)),
+      target: RecordTarget.fromAlias(new ApiGatewayDomain(domainname)),
       zone: subdomain,
       recordName: `api.${subdomain.zoneName}`,
     });
