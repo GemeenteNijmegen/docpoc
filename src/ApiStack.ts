@@ -2,7 +2,7 @@ import { Stack, StackProps } from 'aws-cdk-lib';
 import { ApiKey, LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { ARecord, HostedZone, NsRecord, RecordTarget } from 'aws-cdk-lib/aws-route53';
-import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
+import { ApiGateway, ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
@@ -44,7 +44,7 @@ export class ApiStack extends Stack {
       throw Error('Expected domain name to be set for API gateway');
     }
     new ARecord(this, 'a-record', {
-      target: RecordTarget.fromAlias(new ApiGatewayDomain(this.api.domainName)),
+      target: RecordTarget.fromAlias(new ApiGateway(this.api)),
       zone: subdomain,
       recordName: `api.${subdomain.zoneName}`,
     });
