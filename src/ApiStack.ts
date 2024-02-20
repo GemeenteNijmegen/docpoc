@@ -100,6 +100,8 @@ export class ApiStack extends Stack {
         MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
       },
     });
+    secretMTLSPrivateKey.grantRead(lambda);
+    jwtSecret.grantRead(lambda);
 
     enkelvoudiginformatieobjecten.addMethod('GET', new LambdaIntegration(lambda), {
       apiKeyRequired: true,
