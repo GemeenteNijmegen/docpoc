@@ -32,20 +32,19 @@ describeIntegration('Corsa Client', () => {
 
   test('Initalization', async () => {
     const client = new CorsaClient();
-    expect(client.initializeApiClient()).toBeDefined();
+    const api = await client.initializeApiClient();
+    expect(api).toBeDefined();
   });
-
 
   test('Geef lijst zaakdocumenten', async () => {
     const client = new CorsaClient();
     expect(client.initializeApiClient()).toBeDefined();
-
     const response = await client.geefLijstZaakDocumenten('5937ac5a-da23-425a-9af8-215ec2c30947');
     console.log(response);
     console.log(JSON.stringify(response, null, 4));
   });
 
-
+  // TODO mock axios client and run this test
   // test('Get zaakdocumenten returns docs', async() => {
   //   const client = new CorsaClient();
   //   const zaakDocumenten = await client.geefLijstZaakDocumenten(randomUUID());

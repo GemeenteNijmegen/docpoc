@@ -29,7 +29,7 @@ export class DocumentVertaalService {
     }
 
     // Call ZaakDMS-endpoint with corsa UUID
-    const zaakDocumenten = new CorsaClient().geefLijstZaakDocumenten(corsaZaakUUID);
+    const zaakDocumenten = await new CorsaClient().geefLijstZaakDocumenten(corsaZaakUUID);
     const corsaDocumentUUIDs = new GeefLijstZaakDocumentenMapper().map(zaakDocumenten);
 
     // Transform response to objectInformatieObjecten response
