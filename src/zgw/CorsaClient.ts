@@ -4,7 +4,6 @@ import { AWS } from '@gemeentenijmegen/utils';
 import { XMLParser } from 'fast-xml-parser';
 import * as geefLijstZaakdocumentenRequest from './soapcalls/geefLijstzaakdocumenten_Lv01.xml';
 import { ZaakDocument, ZaakDocumentSchema, ZaakDocumenten, ZaakDocumentenSchema } from './ZaakDocument';
-import * as geefLijstZaakdocumenten from '../../test/samples/geefLijstZaakdocumenten_Lv01.xml';
 import * as geefZaakDocument from '../../test/samples/geefZaakdocumentLezen_Lv0.xml';
 
 export class CorsaClient {
