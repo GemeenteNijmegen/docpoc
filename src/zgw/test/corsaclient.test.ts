@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import * as fs from 'fs';
 import { describeIntegration } from './utils';
-import { CorsaClient } from '../CorsaClient';
+import { CorsaClientImpl } from '../CorsaClient';
 
 
 jest.mock('@gemeentenijmegen/utils/lib/AWS', () => ({
@@ -31,13 +31,13 @@ beforeAll(() => {
 describeIntegration('Corsa Client', () => {
 
   test('Initalization', async () => {
-    const client = new CorsaClient();
+    const client = new CorsaClientImpl();
     const api = await client.initializeApiClient();
     expect(api).toBeDefined();
   });
 
   test('Geef lijst zaakdocumenten', async () => {
-    const client = new CorsaClient();
+    const client = new CorsaClientImpl();
     expect(client.initializeApiClient()).toBeDefined();
     const response = await client.geefLijstZaakDocumenten('5937ac5a-da23-425a-9af8-215ec2c30947');
     console.log(response);
@@ -53,7 +53,7 @@ describeIntegration('Corsa Client', () => {
   // });
 
   test('Get zaakdocument returns doc', async() => {
-    const client = new CorsaClient();
+    const client = new CorsaClientImpl();
     const zaakDocument = client.geefZaakDocument(randomUUID());
     expect(zaakDocument).toHaveProperty('zkn:auteur');
   });

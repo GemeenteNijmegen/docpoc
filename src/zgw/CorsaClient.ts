@@ -6,7 +6,12 @@ import * as geefLijstZaakdocumentenRequest from './soapcalls/geefLijstzaakdocume
 import { ZaakDocument, ZaakDocumentSchema, ZaakDocumenten, ZaakDocumentenSchema } from './ZaakDocument';
 import * as geefZaakDocument from '../../test/samples/geefZaakdocumentLezen_Lv0.xml';
 
-export class CorsaClient {
+export interface CorsaClient {
+  geefLijstZaakDocumenten(uuid: UUID): Promise<ZaakDocumenten>;
+  geefZaakDocument(_corsaDocumentUuid: UUID): Promise<ZaakDocument>;
+}
+
+export class CorsaClientImpl {
 
   private static readonly alwaysArray = [
     'soap:Envelope.soap:Body.zkn:zakLa01.zkn:antwoord.zkn:object.zkn:heeftRelevant',
@@ -26,7 +31,7 @@ export class CorsaClient {
       alwaysCreateTextNode: true,
       textNodeName: 'text',
       attributeNamePrefix: '',
-      isArray: (_name, jpath) => CorsaClient.alwaysArray.indexOf(jpath) !== -1,
+      isArray: (_name, jpath) => CorsaClientImpl.alwaysArray.indexOf(jpath) !== -1,
     });
   }
 
