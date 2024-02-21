@@ -15,7 +15,12 @@ import { ZaakDocument, ZaakDocumenten } from './ZaakDocument';
  */
 export class DocumentVertaalService {
   private openZaakClient: OpenZaakClient;
+  private corsaBaseUrl: string;
   constructor(openZaakClient: OpenZaakClient) {
+    if (!process.env.CORSA_BASE_URL) {
+      throw Error('missing corsa baseurl');
+    }
+    this.corsaBaseUrl = process.env.CORSA_BASE_URL;
     this.openZaakClient = openZaakClient;
   }
   async listObjectInformatieObjecten(zaakUrl: string): Promise<ObjectInformatieObject[]> {
@@ -29,7 +34,7 @@ export class DocumentVertaalService {
     }
 
     // Call ZaakDMS-endpoint with corsa UUID
-    const zaakDocumenten = await new CorsaClient().geefLijstZaakDocumenten(corsaZaakUUID);
+    const zaakDocumenten = await new CorsaClient(this.corsaBaseUrl).geefLijstZaakDocumenten(corsaZaakUUID);
     const corsaDocumentUUIDs = new GeefLijstZaakDocumentenMapper().map(zaakDocumenten);
 
     // Transform response to objectInformatieObjecten response
@@ -42,7 +47,7 @@ export class DocumentVertaalService {
   async getEnkelVoudigInformatieObject(objectUrlString: string): Promise<EnkelvoudigInformatieObject> {
     // Get document from Corsa based on provided UUID (last path part in call)
     const uuid = this.uuidFromUrlString(objectUrlString);
-    const documentDetails = new CorsaClient().geefZaakDocument(uuid);
+    const documentDetails = new CorsaClient(this.corsaBaseUrl).geefZaakDocument(uuid);
 
     // Transform response to enkelvoudigInformatieObject object
     const enkelvoudigInformatieObject = new GeefZaakDocumentMapper().map(documentDetails);
@@ -52,7 +57,7 @@ export class DocumentVertaalService {
 
   async downloadEnkelVoudigInformatieObject(objectUrlString: string): Promise<any> {
     const uuid = this.uuidFromUrlString(objectUrlString);
-    const documentDetails = new CorsaClient().geefZaakDocument(uuid);
+    const documentDetails = new CorsaClient(this.corsaBaseUrl).geefZaakDocument(uuid);
     return Buffer.from(documentDetails['zkn:inhoud'].text);
   }
 

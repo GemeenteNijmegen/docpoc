@@ -26,7 +26,7 @@ export class ApiStack extends Stack {
 
     const api = this.api.root.addResource('api');
     const v1 = api.addResource('v1');
-    this.setupEnkelvoudiginformatieobjecten(v1);
+    this.objectInformatieObjecten(v1);
 
     this.setupApiKey();
 
@@ -81,20 +81,21 @@ export class ApiStack extends Stack {
   }
 
 
-  setupEnkelvoudiginformatieobjecten(apiResource: Resource) {
+  objectInformatieObjecten(apiResource: Resource) {
 
-    const enkelvoudiginformatieobjecten = apiResource.addResource('enkelvoudiginformatieobjecten').addResource('{uuid}');
+    const resource = apiResource.addResource('enkelvoudiginformatieobjecten').addResource('{uuid}');
 
     const jwtSecret = Secret.fromSecretNameV2(this, 'jwt-token-secret', Statics.openzaakJwtSecret);
     const secretMTLSPrivateKey = Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
 
     const lambda = new ObjectinformatiobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
-      description: 'ZGW enkelvoudiginformatieobjecten endpoint implementation',
+      description: 'ZGW objectinformatieobjecten endpoint implementation',
       environment: {
         OPENZAAK_JWT_SECRET_ARN: jwtSecret.secretArn,
         OPENZAAK_JWT_USER_ID: StringParameter.valueForStringParameter(this, Statics.ssmUserId),
         OPENZAAK_JWT_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmClientId),
         OPENZAAK_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmBaseUrl),
+        CORSA_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmCorsaBaseUrl),
         MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
         MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
         MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,
@@ -103,7 +104,7 @@ export class ApiStack extends Stack {
     secretMTLSPrivateKey.grantRead(lambda);
     jwtSecret.grantRead(lambda);
 
-    enkelvoudiginformatieobjecten.addMethod('GET', new LambdaIntegration(lambda), {
+    resource.addMethod('GET', new LambdaIntegration(lambda), {
       apiKeyRequired: true,
     });
 
