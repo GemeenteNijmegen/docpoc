@@ -43,5 +43,11 @@ export class ParameterStack extends Stack {
       parameterName: Statics.ssmClientId,
     });
 
+
+    new StringParameter(this, 'ssm_zaken_4', {
+      stringValue: '-',
+      parameterName: Statics.ssmCorsaBaseUrl,
+    });
+
   }
 }
