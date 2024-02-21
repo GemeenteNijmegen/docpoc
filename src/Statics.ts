@@ -49,4 +49,9 @@ export abstract class Statics {
    * baseurl for open zaak
    */
   static readonly ssmBaseUrl: string = `/${this.projectName}/openzaak-baseurl`;
+
+  /**
+   * baseurl for corsa
+   */
+  static readonly ssmCorsaBaseUrl: string = `/${this.projectName}/corsa-baseurl`;
 }
