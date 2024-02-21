@@ -983,6 +983,15 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.56.0.tgz#ef20350fec605a7f7035a01764731b2de0f3782b"
   integrity sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==
 
+"@gemeentenijmegen/apiclient@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@gemeentenijmegen/apiclient/-/apiclient-0.0.12.tgz#0d646d071cb312fee78738b129499b7da5c5cb26"
+  integrity sha512-C/3u2Phpa+ycS1hl8M5KjPrN9BxUkvbHprossCaPR6WE4pC4cNRpIVqgSNXutvNahiW7FNOSKUdfEh+DK9nMpw==
+  dependencies:
+    "@aws-sdk/client-secrets-manager" "^3.509.0"
+    "@aws-sdk/client-ssm" "^3.509.0"
+    axios "^1.6.7"
+
 "@gemeentenijmegen/aws-constructs@^0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@gemeentenijmegen/aws-constructs/-/aws-constructs-0.0.5.tgz#f20c895ced380a85dc35b8bb286553b53435c5c8"

@@ -1,4 +1,4 @@
 declare module '*.xml' {
-  const content: any;
+  const content: string;
   export default content;
 }

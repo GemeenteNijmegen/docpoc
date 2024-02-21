@@ -51,6 +51,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@gemeentenijmegen/apiclient": "^0.0.12",
     "@gemeentenijmegen/aws-constructs": "^0.0.5",
     "@gemeentenijmegen/utils": "^0.0.6",
     "@glen/jest-raw-loader": "^2.0.0",

@@ -12,6 +12,7 @@ const project = new GemeenteNijmegenCdkApp({
   projenrcTs: true,
   deps: [
     '@gemeentenijmegen/aws-constructs',
+    '@gemeentenijmegen/apiclient',
     '@gemeentenijmegen/utils',
     '@glen/jest-raw-loader',
     'zod',

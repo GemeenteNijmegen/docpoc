@@ -1,0 +1,38 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:zkn="http://www.egem.nl/StUF/sector/zkn/0310"
+    xmlns:stuf="http://www.egem.nl/StUF/StUF0301">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <zkn:edcLv01 xmlns:stuf="http://www.egem.nl/StUF/StUF0301"
+            xmlns:zkn="http://www.egem.nl/StUF/sector/zkn/0310"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <zkn:stuurgegevens>
+                <stuf:berichtcode>Lv01</stuf:berichtcode>
+                <stuf:zender>
+                    <stuf:applicatie>JZ4ALL</stuf:applicatie>
+                    <stuf:administratie>JZ</stuf:administratie>
+                    <stuf:gebruiker>jz4all</stuf:gebruiker>
+                </stuf:zender>
+                <stuf:ontvanger>
+                    <stuf:organisatie>Woweb B.V.</stuf:organisatie>
+                    <stuf:applicatie>JZ4ALL</stuf:applicatie>
+                    <stuf:administratie>JZ</stuf:administratie>
+                    <stuf:gebruiker>jz4all</stuf:gebruiker>
+                </stuf:ontvanger>
+                <stuf:referentienummer>6504c1d7-8981-4255-891d-61d77f187979</stuf:referentienummer>
+                <stuf:tijdstipBericht>20240221125136</stuf:tijdstipBericht>
+                <stuf:entiteittype>EDC</stuf:entiteittype>
+            </zkn:stuurgegevens>
+            <zkn:parameters>
+                <stuf:sortering>0</stuf:sortering>
+                <stuf:indicatorVervolgvraag>false</stuf:indicatorVervolgvraag>
+            </zkn:parameters>
+            <zkn:gelijk stuf:entiteittype="EDC">
+                <zkn:identificatie>{{zaakid}}</zkn:identificatie>
+            </zkn:gelijk>
+            <zkn:scope>
+                <zkn:object stuf:entiteittype="EDC" stuf:scope="alles"/>
+            </zkn:scope>
+        </zkn:edcLv01>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
