@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { CorsaClientMock } from './CorsaClientMock';
 import * as zaak from '../../../test/samples/zaak.json';
 import { DocumentVertaalService } from '../DocumentVertaalService';
 import { OpenZaakClient } from '../OpenZaakClient';
@@ -31,8 +32,9 @@ describe('Map objectInformatieObjecten calls to zaakDMS', () => {
   // });
 
   test('Return objectinformatieObjecten object', async() => {
-    const client = new OpenZaakClient({ baseUrl: 'https://example.com' });
-    const service = new DocumentVertaalService(client);
+    const openZaakClient = new OpenZaakClient({ baseUrl: 'https://example.com' });
+    const corsaClient = new CorsaClientMock();
+    const service = new DocumentVertaalService(openZaakClient, corsaClient);
     expect(await service.listObjectInformatieObjecten(randomUUID())).toHaveLength(6);
   });
 

@@ -11,7 +11,7 @@ export interface CorsaClient {
   geefZaakDocument(_corsaDocumentUuid: UUID): Promise<ZaakDocument>;
 }
 
-export class CorsaClientImpl {
+export class CorsaClientImpl implements CorsaClient {
 
   private static readonly alwaysArray = [
     'soap:Envelope.soap:Body.zkn:zakLa01.zkn:antwoord.zkn:object.zkn:heeftRelevant',
@@ -73,6 +73,7 @@ export class CorsaClientImpl {
     body = body.replace('{{zaakid}}', uuid);
 
     const client = await this.getApiClient();
+    client.setTimeout(4000); // 4 sec
     const response = await client.postData(this.baseUrl, body, {
       'Content-Type': 'text/xml',
       'SoapAction': 'http://www.egem.nl/StUF/sector/zkn/0310/geefLijstZaakdocumenten_Lv01',
@@ -82,7 +83,7 @@ export class CorsaClientImpl {
   }
 
 
-  geefZaakDocument(_corsaDocumentUuid: UUID) {
+  async geefZaakDocument(_corsaDocumentUuid: UUID) {
     return this.parseZaakDocument(geefZaakDocument.default);
   }
 

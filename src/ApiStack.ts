@@ -95,7 +95,7 @@ export class ApiStack extends Stack {
         OPENZAAK_JWT_USER_ID: StringParameter.valueForStringParameter(this, Statics.ssmUserId),
         OPENZAAK_JWT_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmClientId),
         OPENZAAK_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmBaseUrl),
-        CORSA_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmCorsaBaseUrl),
+        CORSA_CLIENT_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmCorsaBaseUrl),
         MTLS_CLIENT_CERT_NAME: Statics.ssmMTLSClientCert,
         MTLS_ROOT_CA_NAME: Statics.ssmMTLSRootCA,
         MTLS_PRIVATE_KEY_ARN: secretMTLSPrivateKey.secretArn,

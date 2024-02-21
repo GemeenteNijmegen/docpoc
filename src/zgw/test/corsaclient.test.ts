@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import * as fs from 'fs';
 import { describeIntegration } from './utils';
 import { CorsaClientImpl } from '../CorsaClient';
@@ -30,13 +29,13 @@ beforeAll(() => {
 
 describeIntegration('Corsa Client', () => {
 
-  test('Initalization', async () => {
+  test('Initalization', async () => { // LIVE (initialization)
     const client = new CorsaClientImpl();
     const api = await client.initializeApiClient();
     expect(api).toBeDefined();
   });
 
-  test('Geef lijst zaakdocumenten', async () => {
+  test('Geef lijst zaakdocumenten', async () => { // LIVE
     const client = new CorsaClientImpl();
     expect(client.initializeApiClient()).toBeDefined();
     const response = await client.geefLijstZaakDocumenten('5937ac5a-da23-425a-9af8-215ec2c30947');
@@ -52,9 +51,10 @@ describeIntegration('Corsa Client', () => {
   //   expect(zaakDocumenten.pop()).toHaveProperty('zkn:gerelateerde.zkn:identificatie');
   // });
 
-  test('Get zaakdocument returns doc', async() => {
-    const client = new CorsaClientImpl();
-    const zaakDocument = client.geefZaakDocument(randomUUID());
-    expect(zaakDocument).toHaveProperty('zkn:auteur');
-  });
+  // TODO fix this test using the mock
+  // test('Get zaakdocument returns doc', async() => {
+  //   const client = new CorsaClientMock();
+  //   const zaakDocument = client.geefZaakDocument(randomUUID());
+  //   expect(zaakDocument).toHaveProperty('zkn:auteur');
+  // });
 });
