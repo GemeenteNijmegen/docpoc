@@ -18,12 +18,17 @@ export class CorsaClientImpl implements CorsaClient {
   ];
 
   private parser: XMLParser;
-  private baseUrl?: string;
+  private baseUrl: string;
   private apiClient?: ApiClient;
 
   constructor(baseUrl?: string, apiClient?: ApiClient) {
     if (!baseUrl) {
+      if (!process.env.CORSA_CLIENT_BASE_URL) {
+        throw new Error('CORSA_CLIENT_BASE_URL not set and no baseUrl provided');
+      }
       this.baseUrl = process.env.CORSA_CLIENT_BASE_URL;
+    } else {
+      this.baseUrl = baseUrl;
     }
     this.apiClient = apiClient;
     this.parser = new XMLParser({
