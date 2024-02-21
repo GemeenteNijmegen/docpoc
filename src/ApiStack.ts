@@ -88,6 +88,10 @@ export class ApiStack extends Stack {
     const jwtSecret = Secret.fromSecretNameV2(this, 'jwt-token-secret', Statics.openzaakJwtSecret);
     const secretMTLSPrivateKey = Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
 
+    const mtlsCertificate = StringParameter.fromStringParameterName(this, 'mtls-cert', Statics.ssmMTLSClientCert);
+    const mtlsRootCa = StringParameter.fromStringParameterName(this, 'mtls-root-ca', Statics.ssmMTLSRootCA);
+    const mtlsPrivateKey = Secret.fromSecretNameV2(this, 'mtls-private-key', Statics.secretMTLSPrivateKey);
+
     const lambda = new ObjectinformatiobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
       description: 'ZGW objectinformatieobjecten endpoint implementation',
       environment: {
@@ -103,6 +107,9 @@ export class ApiStack extends Stack {
     });
     secretMTLSPrivateKey.grantRead(lambda);
     jwtSecret.grantRead(lambda);
+    mtlsCertificate.grantRead(lambda);
+    mtlsRootCa.grantRead(lambda);
+    mtlsPrivateKey.grantRead(lambda);
 
     resource.addMethod('GET', new LambdaIntegration(lambda), {
       apiKeyRequired: true,
