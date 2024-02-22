@@ -26,7 +26,7 @@ export class DocumentVertaalService {
     const sampleZaak = await this.openZaakClient.request(zaakUrl);
     let corsaZaakUUID = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk?.bron == 'Corsa_Id')?.kenmerk;
     if (!corsaZaakUUID) {
-      corsaZaakUUID = randomUUID(); //TODO: Remove and throw error when implemented in open zaak
+      corsaZaakUUID = '5937ac5a-da23-425a-9af8-215ec2c30947'; //TODO: Remove and throw error when implemented in open zaak
       // throw Error('No matching Corsa zaak UUID found');
     }
 
