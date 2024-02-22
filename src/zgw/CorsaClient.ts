@@ -3,12 +3,12 @@ import { ApiClient } from '@gemeentenijmegen/apiclient';
 import { AWS } from '@gemeentenijmegen/utils';
 import { XMLParser } from 'fast-xml-parser';
 import * as geefLijstZaakdocumentenRequest from './soapcalls/geefLijstzaakdocumenten_Lv01.xml';
-import * as geefZaakDocument from './soapcalls/geefZaakdocumentLezen_EdcLv01.xml';
+import * as geefZaakDocumenRequest from './soapcalls/geefZaakdocumentLezen_EdcLv01.xml';
 import { ZaakDocument, ZaakDocumentSchema, ZaakDocumenten, ZaakDocumentenSchema } from './ZaakDocument';
 
 export interface CorsaClient {
   geefLijstZaakDocumenten(uuid: UUID): Promise<ZaakDocumenten>;
-  geefZaakDocument(_corsaDocumentUuid: UUID): Promise<ZaakDocument>;
+  geefZaakDocument(corsaDocumentUuid: UUID): Promise<ZaakDocument>;
 }
 
 export class CorsaClientImpl implements CorsaClient {
@@ -38,9 +38,6 @@ export class CorsaClientImpl implements CorsaClient {
       attributeNamePrefix: '',
       isArray: (_name, jpath) => CorsaClientImpl.alwaysArray.indexOf(jpath) !== -1,
     });
-  }
-  geefZaakDocument(_corsaDocumentUuid: `${string}-${string}-${string}-${string}-${string}`): Promise<{ 'zkn:identificatie': { text: string }; 'zkn:auteur': { text: string }; 'zkn:creatiedatum': { text: number }; 'zkn:taal': { text: string }; 'zkn:titel': { text: string }; 'zkn:inhoud': { text: string; 'stuf:bestandsnaam': string }; 'zkn:dct.omschrijving': { text?: string | undefined } }> {
-    throw new Error('Method not implemented.');
   }
 
 
@@ -86,10 +83,10 @@ export class CorsaClientImpl implements CorsaClient {
     return this.parseZaakDocumenten(response);
   }
 
-  async geefZaakdocument(corsaDocumentUuid: UUID): Promise<ZaakDocument> {
+  async geefZaakDocument(corsaDocumentUuid: UUID): Promise<ZaakDocument> {
 
     // Construct the Zaak DMS request
-    let body = geefZaakDocument.default;
+    let body = geefZaakDocumenRequest.default;
     body = body.replace('{{documentid}}', corsaDocumentUuid);
 
     const client = await this.getApiClient();
