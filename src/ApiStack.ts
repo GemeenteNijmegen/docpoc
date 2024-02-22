@@ -8,6 +8,7 @@ import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { Configurable } from './Configuration';
+import { EnkelvoudiginformatieobjectenFunction } from './lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten-function';
 import { ObjectinformatiobjectenFunction } from './lambdas/objectinformatieobjecten/objectinformatiobjecten-function';
 import { Statics } from './Statics';
 
@@ -132,7 +133,7 @@ export class ApiStack extends Stack {
     const mtlsRootCa = StringParameter.fromStringParameterName(this, 'mtls-root-ca-2', Statics.ssmMTLSRootCA);
     const mtlsPrivateKey = Secret.fromSecretNameV2(this, 'mtls-private-key-2', Statics.secretMTLSPrivateKey);
 
-    const lambda = new ObjectinformatiobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
+    const lambda = new EnkelvoudiginformatieobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
       description: 'ZGW enkelvoudiginformatieobjecten endpoint implementation',
       timeout: Duration.seconds(6),
       environment: {
