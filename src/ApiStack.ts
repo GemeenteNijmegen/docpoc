@@ -28,6 +28,7 @@ export class ApiStack extends Stack {
     const api = this.api.root.addResource('api');
     const v1 = api.addResource('v1');
     this.objectInformatieObjecten(v1);
+    this.enkelvoudiginformatieobjecten(v1);
 
     this.setupApiKey();
 
