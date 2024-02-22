@@ -23,6 +23,9 @@ export class ApiStack extends Stack {
 
     this.api = new RestApi(this, 'gateway', {
       description: 'DocPoc API Gateway (zgw to Zaak DMS translation service)',
+      binaryMediaTypes: [
+        'text/pdf',
+      ],
     });
 
 
