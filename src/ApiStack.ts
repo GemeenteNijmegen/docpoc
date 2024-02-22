@@ -83,7 +83,7 @@ export class ApiStack extends Stack {
 
   objectInformatieObjecten(apiResource: Resource) {
 
-    const resource = apiResource.addResource('enkelvoudiginformatieobjecten').addResource('{uuid}');
+    const resource = apiResource.addResource('objectinformatieobjecten').addResource('{uuid}');
 
     const jwtSecret = Secret.fromSecretNameV2(this, 'jwt-token-secret', Statics.openzaakJwtSecret);
     const secretMTLSPrivateKey = Secret.fromSecretNameV2(this, 'tls-key-secret', Statics.secretMTLSPrivateKey);
@@ -92,7 +92,7 @@ export class ApiStack extends Stack {
     const mtlsRootCa = StringParameter.fromStringParameterName(this, 'mtls-root-ca', Statics.ssmMTLSRootCA);
     const mtlsPrivateKey = Secret.fromSecretNameV2(this, 'mtls-private-key', Statics.secretMTLSPrivateKey);
 
-    const lambda = new ObjectinformatiobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
+    const lambda = new ObjectinformatiobjectenFunction(this, 'objectinformatieobjecten', {
       description: 'ZGW objectinformatieobjecten endpoint implementation',
       environment: {
         OPENZAAK_JWT_SECRET_ARN: jwtSecret.secretArn,
