@@ -39,16 +39,9 @@ export class DocumentVertaalService {
     return EnkelvoudigInformatieObjectSchema.parse(enkelvoudigInformatieObject);
   }
 
-  async downloadEnkelVoudigInformatieObject(objectUrlString: string): Promise<any> {
-    const uuid = this.uuidFromUrlString(objectUrlString);
-    const documentDetails = await this.corsaClient.geefZaakDocument(uuid);
+  async downloadEnkelVoudigInformatieObject(documentUUID: UUID): Promise<any> {
+    const documentDetails = await this.corsaClient.geefZaakDocument(documentUUID);
     return Buffer.from(documentDetails['zkn:inhoud'].text);
-  }
-
-  private uuidFromUrlString(objectUrlString: string) {
-    const objectUrl = new URL(objectUrlString);
-    const uuid = objectUrl.pathname.split('/').pop() as UUID;
-    return uuid;
   }
 
   mapUUIDsToObjectInformatieObjecten(zaakId: UUID, uuids: UUID[]): ObjectInformatieObject[] {
