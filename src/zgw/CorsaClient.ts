@@ -71,7 +71,7 @@ export class CorsaClientImpl implements CorsaClient {
 
     // Construct the Zaak DMS request
     let body = geefLijstZaakdocumentenRequest.default;
-    body = body.replace('{{zaakid}}', uuid);
+    body = body.replaceAll('{{zaakid}}', uuid);
 
     const client = await this.getApiClient();
     client.setTimeout(4000); // 4 sec
@@ -87,10 +87,11 @@ export class CorsaClientImpl implements CorsaClient {
 
     // Construct the Zaak DMS request
     let body = geefZaakDocumenRequest.default;
-    body = body.replace('{{documentid}}', corsaDocumentUuid);
+    body = body.replaceAll('{{documentid}}', corsaDocumentUuid);
 
     const client = await this.getApiClient();
     client.setTimeout(4000); // 4 sec
+
     const response = await client.postData(this.baseUrl, body, {
       'Content-Type': 'text/xml',
       'SoapAction': 'http://www.egem.nl/StUF/sector/zkn/0310/geefZaakdocumentLezen_Lv01',
