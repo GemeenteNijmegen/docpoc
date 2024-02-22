@@ -1,4 +1,4 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { ApiKey, LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { Function } from 'aws-cdk-lib/aws-lambda';
@@ -99,6 +99,7 @@ export class ApiStack extends Stack {
 
     const lambda = new ObjectinformatiobjectenFunction(this, 'objectinformatieobjecten', {
       description: 'ZGW objectinformatieobjecten endpoint implementation',
+      timeout: Duration.seconds(6),
       environment: {
         OPENZAAK_JWT_SECRET_ARN: jwtSecret.secretArn,
         OPENZAAK_JWT_USER_ID: StringParameter.valueForStringParameter(this, Statics.ssmUserId),
@@ -121,13 +122,10 @@ export class ApiStack extends Stack {
     resource.addMethod('GET', new LambdaIntegration(lambda), {
       apiKeyRequired: true,
     });
-
   }
 
   enkelvoudiginformatieobjecten(apiResource: Resource) {
-
     const resource = apiResource.addResource('enkelvoudiginformatieobjecten').addResource('{uuid}');
-
     const secretMTLSPrivateKey = Secret.fromSecretNameV2(this, 'tls-key-secret-2', Statics.secretMTLSPrivateKey);
     const mtlsCertificate = StringParameter.fromStringParameterName(this, 'mtls-cert-2', Statics.ssmMTLSClientCert);
     const mtlsRootCa = StringParameter.fromStringParameterName(this, 'mtls-root-ca-2', Statics.ssmMTLSRootCA);
@@ -135,6 +133,7 @@ export class ApiStack extends Stack {
 
     const lambda = new ObjectinformatiobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
       description: 'ZGW enkelvoudiginformatieobjecten endpoint implementation',
+      timeout: Duration.seconds(6),
       environment: {
         CORSA_CLIENT_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmCorsaBaseUrl),
         CORSA_CLIENT_MTLS_CERTIFICATE_PARAM_NAME: Statics.ssmMTLSClientCert,
@@ -155,7 +154,6 @@ export class ApiStack extends Stack {
 
   }
 
-
   setupApiKey() {
     const plan = this.api.addUsagePlan('default-usage-plan', {
       description: 'Default usage plan with API key',
@@ -167,6 +165,4 @@ export class ApiStack extends Stack {
       stage: this.api.deploymentStage,
     });
   }
-
-
 }
