@@ -2,7 +2,6 @@ import { UUID, randomUUID } from 'crypto';
 import { CorsaClient } from './CorsaClient';
 import { EnkelvoudigInformatieObject, EnkelvoudigInformatieObjectSchema } from './EnkelvoudigInformatieObjectSchema';
 import { ObjectInformatieObject } from './ObjectInformatieObject';
-import { OpenZaakClient } from './OpenZaakClient';
 import { getFileSizeForBase64String } from './utils';
 import { ZaakDocument, ZaakDocumenten } from './ZaakDocument';
 /**
@@ -14,21 +13,11 @@ import { ZaakDocument, ZaakDocumenten } from './ZaakDocument';
  * with bron 'Corsa_Id'.
  */
 export class DocumentVertaalService {
-  private openZaakClient: OpenZaakClient;
   private corsaClient: CorsaClient;
-  constructor(openZaakClient: OpenZaakClient, corsaClient: CorsaClient) {
-    this.openZaakClient = openZaakClient;
+  constructor(corsaClient: CorsaClient) {
     this.corsaClient = corsaClient;
   }
-  async listObjectInformatieObjecten(zaakUrl: string): Promise<ObjectInformatieObject[]> {
-
-    // Retrieve corsa ID from zaak
-    const sampleZaak = await this.openZaakClient.request(zaakUrl);
-    let corsaZaakUUID = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk?.bron == 'Corsa_Id')?.kenmerk;
-    if (!corsaZaakUUID) {
-      corsaZaakUUID = '5937ac5a-da23-425a-9af8-215ec2c30947'; //TODO: Remove and throw error when implemented in open zaak
-      // throw Error('No matching Corsa zaak UUID found');
-    }
+  async listObjectInformatieObjecten(corsaZaakUUID: UUID): Promise<ObjectInformatieObject[]> {
 
     // Call ZaakDMS-endpoint with corsa UUID
     const zaakDocumenten = await this.corsaClient.geefLijstZaakDocumenten(corsaZaakUUID);
@@ -41,10 +30,9 @@ export class DocumentVertaalService {
     return objects;
   }
 
-  async getEnkelVoudigInformatieObject(objectUrlString: string): Promise<EnkelvoudigInformatieObject> {
+  async getEnkelVoudigInformatieObject(documentUUID: UUID): Promise<EnkelvoudigInformatieObject> {
     // Get document from Corsa based on provided UUID (last path part in call)
-    const uuid = this.uuidFromUrlString(objectUrlString);
-    const documentDetails = await this.corsaClient.geefZaakDocument(uuid);
+    const documentDetails = await this.corsaClient.geefZaakDocument(documentUUID);
 
     // Transform response to enkelvoudigInformatieObject object
     const enkelvoudigInformatieObject = new GeefZaakDocumentMapper().map(documentDetails);
