@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <zkn:edcLv01
+            xmlns:stuf="http://www.egem.nl/StUF/StUF0301"
+            xmlns:zkn="http://www.egem.nl/StUF/sector/zkn/0310"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <zkn:stuurgegevens>
+                <stuf:berichtcode>Lv01</stuf:berichtcode>
+                <stuf:zender>
+                    <stuf:organisatie>klantorg</stuf:organisatie>
+                    <stuf:applicatie>klantapp</stuf:applicatie>
+                    <stuf:administratie>klantadmin</stuf:administratie>
+                    <stuf:gebruiker>zdstest</stuf:gebruiker>
+                </stuf:zender>
+                <stuf:entiteittype>EDC</stuf:entiteittype>
+            </zkn:stuurgegevens>
+            <zkn:parameters>
+                <stuf:sortering>0</stuf:sortering>
+                <stuf:indicatorVervolgvraag>false</stuf:indicatorVervolgvraag>
+            </zkn:parameters>
+            <zkn:gelijk stuf:entiteittype="EDC">
+                <zkn:identificatie>{{documentid}}</zkn:identificatie>
+            </zkn:gelijk>
+            <zkn:scope>
+                <zkn:object stuf:entiteittype="EDC" stuf:scope="alles"/>
+            </zkn:scope>
+        </zkn:edcLv01>
+    </soapenv:Body>
+</soapenv:Envelope>
