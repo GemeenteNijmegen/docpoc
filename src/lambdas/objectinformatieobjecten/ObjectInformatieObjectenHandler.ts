@@ -14,14 +14,30 @@ export class ObjectInformatieObjectenHandler {
   }
 
   async handleRequest(uuid: UUID) {
-    const urlString = `${this.openZaakClient.baseUrl}zaken/api/v1/zaken/${uuid}`;
-    // Retrieve corsa ID from zaak
-    const sampleZaak = await this.openZaakClient.request(urlString);
-    let corsaZaakUUID = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk?.bron == 'Corsa_Id')?.kenmerk;
-    if (!corsaZaakUUID) {
-      corsaZaakUUID = '5937ac5a-da23-425a-9af8-215ec2c30947'; //TODO: Remove and throw error when implemented in open zaak
+
+    // Get zaak info from Open Zaak
+    const openZaak = await this.getOpenZaak(uuid);
+    let corsaZaakUuid = await this.getZaakCorsaUuid(openZaak);
+
+    if (!corsaZaakUuid) {
+      corsaZaakUuid = '5937ac5a-da23-425a-9af8-215ec2c30947'; //TODO: Remove and throw error when implemented in open zaak
       // throw Error('No matching Corsa zaak UUID found');
     }
-    return this.service.listObjectInformatieObjecten(corsaZaakUUID);
+    return this.service.listObjectInformatieObjecten(corsaZaakUuid);
   };
+
+  async getOpenZaak(zaakUuid: UUID) {
+    const urlString = `${this.openZaakClient.baseUrl}zaken/api/v1/zaken/${zaakUuid}`;
+    const openZaak = await this.openZaakClient.request(urlString);
+    return openZaak;
+  }
+
+  async getZaakCorsaUuid(openZaak: any) {
+    if (!openZaak.eigenschappen || openZaak.eigenschappen.length != 1) {
+      throw Error('Expected exactly one eigenschap in open zaak');
+    }
+    const url = openZaak.eigenschappen[0];
+    const corsaZaakEigenschap = await this.openZaakClient.request(url);
+    return corsaZaakEigenschap.waarde;
+  }
 }
