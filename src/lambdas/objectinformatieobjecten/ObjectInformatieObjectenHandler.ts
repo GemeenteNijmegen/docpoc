@@ -14,14 +14,10 @@ export class ObjectInformatieObjectenHandler {
   }
 
   async handleRequest(uuid: UUID) {
-
-    // Get zaak info from Open Zaak
     const openZaak = await this.getOpenZaak(uuid);
     let corsaZaakUuid = await this.getZaakCorsaUuid(openZaak);
-
     if (!corsaZaakUuid) {
-      corsaZaakUuid = '5937ac5a-da23-425a-9af8-215ec2c30947'; //TODO: Remove and throw error when implemented in open zaak
-      // throw Error('No matching Corsa zaak UUID found');
+      throw Error('No matching Corsa zaak UUID found');
     }
     return this.service.listObjectInformatieObjecten(corsaZaakUuid);
   };

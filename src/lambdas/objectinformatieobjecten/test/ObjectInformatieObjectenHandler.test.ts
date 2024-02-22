@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import * as zaak from '../../../../test/samples/zaak.json';
+import * as zaakEigenschapCorsaUuid from '../../../../test/samples/zaakEigenschapCorsaUuid.json';
 import { OpenZaakClient } from '../../../zgw/OpenZaakClient';
 import { CorsaClientMock } from '../../../zgw/test/CorsaClientMock';
 import { ObjectInformatieObjectenHandler } from '../ObjectInformatieObjectenHandler';
@@ -9,7 +10,12 @@ jest.mock('../../../zgw/OpenZaakClient', () => {
     OpenZaakClient: jest.fn(() => {
       return {
         initAxios: jest.fn(),
-        request: jest.fn(() => zaak),
+        request: jest.fn((url) => {
+          if (url.includes('zaakeigenschappen')) {
+            return zaakEigenschapCorsaUuid;
+          }
+          return zaak;
+        }),
       };
     }),
   };
