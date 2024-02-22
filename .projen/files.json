@@ -16,6 +16,7 @@
     ".projen/tasks.json",
     "cdk.json",
     "LICENSE",
+    "src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten-function.ts",
     "src/lambdas/objectinformatieobjecten/objectinformatiobjecten-function.ts",
     "tsconfig.dev.json",
     "tsconfig.json"

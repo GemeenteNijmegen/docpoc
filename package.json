@@ -4,6 +4,8 @@
     "build": "npx projen build",
     "bump": "npx projen bump",
     "bundle": "npx projen bundle",
+    "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda": "npx projen bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda",
+    "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda:watch": "npx projen bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda:watch",
     "bundle:lambdas/objectinformatieobjecten/objectinformatiobjecten.lambda": "npx projen bundle:lambdas/objectinformatieobjecten/objectinformatiobjecten.lambda",
     "bundle:lambdas/objectinformatieobjecten/objectinformatiobjecten.lambda:watch": "npx projen bundle:lambdas/objectinformatieobjecten/objectinformatiobjecten.lambda:watch",
     "clobber": "npx projen clobber",

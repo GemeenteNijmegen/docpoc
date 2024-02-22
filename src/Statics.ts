@@ -5,8 +5,8 @@ export abstract class Statics {
   static readonly subdomain = 'docpoc';
 
   // SSM parameters
-  static readonly ssmAccountRootHostedZoneId: string = '/gemeente-nijmegen/account/hostedzone/id';
-  static readonly ssmAccountRootHostedZoneName: string = '/gemeente-nijmegen/account/hostedzone/name';
+  static readonly ssmAccountRootHostedZoneId = '/gemeente-nijmegen/account/hostedzone/id';
+  static readonly ssmAccountRootHostedZoneName = '/gemeente-nijmegen/account/hostedzone/name';
 
   // Environments
 
@@ -18,40 +18,45 @@ export abstract class Statics {
   /**
    * Certificate private key for mTLS
    */
-  static readonly secretMTLSPrivateKey: string = `/${this.projectName}/mtls-privatekey`;
+  static readonly secretMTLSPrivateKey = `/${this.projectName}/mtls-privatekey`;
 
   /**
     * Certificate for mTLS
     */
-  static readonly ssmMTLSClientCert: string = `/${this.projectName}/mtls-clientcert`;
+  static readonly ssmMTLSClientCert = `/${this.projectName}/mtls-clientcert`;
 
   /**
    * Root CA for mTLS (PKIO root)
    */
-  static readonly ssmMTLSRootCA: string = `/${this.projectName}/mtls-rootca`;
+  static readonly ssmMTLSRootCA = `/${this.projectName}/mtls-rootca`;
 
   /**
    * jwt secret for Open zaak
    */
-  static readonly openzaakJwtSecret: string = `/${this.projectName}/openzaak-jwtsecret`;
+  static readonly openzaakJwtSecret = `/${this.projectName}/openzaak-jwtsecret`;
 
   /**
    * UserID for JWT Open zaak
    */
-  static readonly ssmUserId: string = `/${this.projectName}/openzaak-jwt-userid`;
+  static readonly ssmUserId = `/${this.projectName}/openzaak-jwt-userid`;
 
   /**
    * ClientId for JWT Open zaak
    */
-  static readonly ssmClientId: string = `/${this.projectName}/openzaak-jwt-clientid`;
+  static readonly ssmClientId = `/${this.projectName}/openzaak-jwt-clientid`;
 
   /**
    * baseurl for open zaak
    */
-  static readonly ssmBaseUrl: string = `/${this.projectName}/openzaak-baseurl`;
+  static readonly ssmBaseUrl = `/${this.projectName}/openzaak-baseurl`;
 
   /**
    * baseurl for corsa
    */
-  static readonly ssmCorsaBaseUrl: string = `/${this.projectName}/corsa-baseurl`;
+  static readonly ssmCorsaBaseUrl = `/${this.projectName}/corsa-baseurl`;
+
+  /**
+   * Baseurl for this application
+   */
+  static readonly ssmApplicationBaseUrl = `/${this.projectName}/application-baseurl`;
 }

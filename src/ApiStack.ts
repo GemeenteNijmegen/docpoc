@@ -1,6 +1,7 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { ApiKey, LambdaIntegration, Resource, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
+import { Function } from 'aws-cdk-lib/aws-lambda';
 import { ARecord, HostedZone, NsRecord, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { ApiGateway } from 'aws-cdk-lib/aws-route53-targets';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -80,6 +81,10 @@ export class ApiStack extends Stack {
     return zone;
   }
 
+  sharedLambdaConfiguration(lambda: Function) {
+    const applicationBaseUrl = StringParameter.valueForStringParameter(this, Statics.ssmApplicationBaseUrl);
+    lambda.addEnvironment('APPLICATION_BASE_URL', applicationBaseUrl);
+  }
 
   objectInformatieObjecten(apiResource: Resource) {
 
@@ -111,11 +116,45 @@ export class ApiStack extends Stack {
     mtlsRootCa.grantRead(lambda);
     mtlsPrivateKey.grantRead(lambda);
 
+    this.sharedLambdaConfiguration(lambda);
+
     resource.addMethod('GET', new LambdaIntegration(lambda), {
       apiKeyRequired: true,
     });
 
   }
+
+  enkelvoudiginformatieobjecten(apiResource: Resource) {
+
+    const resource = apiResource.addResource('enkelvoudiginformatieobjecten').addResource('{uuid}');
+
+    const secretMTLSPrivateKey = Secret.fromSecretNameV2(this, 'tls-key-secret-2', Statics.secretMTLSPrivateKey);
+    const mtlsCertificate = StringParameter.fromStringParameterName(this, 'mtls-cert-2', Statics.ssmMTLSClientCert);
+    const mtlsRootCa = StringParameter.fromStringParameterName(this, 'mtls-root-ca-2', Statics.ssmMTLSRootCA);
+    const mtlsPrivateKey = Secret.fromSecretNameV2(this, 'mtls-private-key-2', Statics.secretMTLSPrivateKey);
+
+    const lambda = new ObjectinformatiobjectenFunction(this, 'enkelvoudiginformatieobjecten', {
+      description: 'ZGW enkelvoudiginformatieobjecten endpoint implementation',
+      environment: {
+        CORSA_CLIENT_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmCorsaBaseUrl),
+        CORSA_CLIENT_MTLS_CERTIFICATE_PARAM_NAME: Statics.ssmMTLSClientCert,
+        CORSA_CLIENT_MTLS_ROOT_CA_BUNDLE_PARAM_NAME: Statics.ssmMTLSRootCA,
+        CORSA_CLIENT_MTLS_PRIVATE_KEY_SECRET_ARN: secretMTLSPrivateKey.secretArn,
+      },
+    });
+    secretMTLSPrivateKey.grantRead(lambda);
+    mtlsCertificate.grantRead(lambda);
+    mtlsRootCa.grantRead(lambda);
+    mtlsPrivateKey.grantRead(lambda);
+
+    this.sharedLambdaConfiguration(lambda);
+
+    resource.addMethod('GET', new LambdaIntegration(lambda), {
+      apiKeyRequired: true,
+    });
+
+  }
+
 
   setupApiKey() {
     const plan = this.api.addUsagePlan('default-usage-plan', {

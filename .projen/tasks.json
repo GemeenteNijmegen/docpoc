@@ -46,7 +46,28 @@
       "description": "Prepare assets",
       "steps": [
         {
+          "spawn": "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda"
+        },
+        {
           "spawn": "bundle:lambdas/objectinformatieobjecten/objectinformatiobjecten.lambda"
+        }
+      ]
+    },
+    "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda": {
+      "name": "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda",
+      "description": "Create a JavaScript bundle from src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.xml=text"
+        }
+      ]
+    },
+    "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda:watch": {
+      "name": "bundle:lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda.ts --target=\"node18\" --platform=\"node\" --outfile=\"assets/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --loader:.xml=text --watch"
         }
       ]
     },

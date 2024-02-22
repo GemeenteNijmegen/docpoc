@@ -148,6 +148,7 @@
         "devDependencies": [
           "**/test/**",
           "**/build-tools/**",
+          "src/lambdas/enkelvoudiginformatieobjecten/enkelvoudiginformatieobjecten.lambda.ts",
           "src/lambdas/objectinformatieobjecten/objectinformatiobjecten.lambda.ts",
           ".projenrc.ts",
           "projenrc/**/*.ts"
