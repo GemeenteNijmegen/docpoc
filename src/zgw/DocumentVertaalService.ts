@@ -67,10 +67,10 @@ export class DocumentVertaalService {
   mapUUIDsToObjectInformatieObjecten(zaakId: UUID, uuids: UUID[]): ObjectInformatieObject[] {
     return uuids.map(uuid => {
       return {
-        url: `http://zaken.nl/${zaakId}`,
-        informatieobject: `https://documenten-api.vng.cloud/api/v1/enkelvoudiginformatieobjecten/${uuid}`,
-        object: 'http://example.com',
-        objectType: 'besluit',
+        url: `${process.env.APPLICATION_BASE_URL}/objectinformatieobjecten/${zaakId}`,
+        informatieobject: `${process.env.APPLICATION_BASE_URL}/enkelvoudiginformatieobjecten/${uuid}`,
+        object: `${process.env.OPENZAAK_BASE_URL}/zaken/api/v1/zaken/${zaakId}`,
+        objectType: 'zaak',
         // _expand: {
         //   'informatieobject.titel': '',
         // },
