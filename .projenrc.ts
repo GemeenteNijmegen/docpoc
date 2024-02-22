@@ -35,6 +35,11 @@ const project = new GemeenteNijmegenCdkApp({
       roots: ['src', 'test'],
     },
   },
+  tsconfig: {
+    compilerOptions: {
+      lib: ['es2021'],
+    },
+  },
   bundlerOptions: {
     loaders: {
       xml: 'text',
