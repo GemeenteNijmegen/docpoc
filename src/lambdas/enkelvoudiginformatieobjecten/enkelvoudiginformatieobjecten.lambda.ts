@@ -11,7 +11,7 @@ function parseParameters(event: APIGatewayProxyEvent) {
   }
   return {
     uuid: event.pathParameters.uuid as UUID,
-    download: !event.pathParameters?.download,
+    action: event.pathParameters?.action,
   };
 }
 
