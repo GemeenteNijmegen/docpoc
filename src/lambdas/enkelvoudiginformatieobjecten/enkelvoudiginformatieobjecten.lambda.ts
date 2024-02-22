@@ -11,7 +11,7 @@ function parseParameters(event: APIGatewayProxyEvent) {
   }
   return {
     uuid: event.pathParameters.uuid as UUID,
-    action: event.pathParameters?.action,
+    download: event.pathParameters?.download == 'download',
   };
 }
 
@@ -24,10 +24,18 @@ export async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayPr
   // TODO call vertaal service
   const params = parseParameters(event);
   const requestHandler = new EnkelvoudigInformatieObjectenHandler(client);
-  return {
-    body: JSON.stringify(await requestHandler.handleRequest(params.uuid)),
-    statusCode: 200,
-  };
+  if (params.download) {
+    return {
+      body: await requestHandler.handleDownloadRequest(params.uuid),
+      statusCode: 200,
+    };
+  } else {
+    return {
+      body: JSON.stringify(await requestHandler.handleRequest(params.uuid)),
+      statusCode: 200,
+    };
+
+  }
 }
 
 function sharedCorsaClient(): CorsaClient {

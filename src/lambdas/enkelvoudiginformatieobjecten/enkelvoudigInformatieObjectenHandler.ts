@@ -10,7 +10,11 @@ export class EnkelvoudigInformatieObjectenHandler {
     this.service = new DocumentVertaalService(corsaClient);
   }
 
-  handleRequest(documentUUID: UUID) {
+  async handleDownloadRequest(documentUUID: UUID) {
+    return this.service.downloadEnkelVoudigInformatieObject(documentUUID);
+  }
+
+  async handleRequest(documentUUID: UUID) {
     return this.service.getEnkelVoudigInformatieObject(documentUUID);
   };
 }
