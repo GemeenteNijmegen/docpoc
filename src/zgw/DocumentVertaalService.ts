@@ -1,4 +1,4 @@
-import { UUID, randomUUID } from 'crypto';
+import { UUID } from 'crypto';
 import { CorsaClient } from './CorsaClient';
 import { EnkelvoudigInformatieObject, EnkelvoudigInformatieObjectSchema } from './EnkelvoudigInformatieObjectSchema';
 import { ObjectInformatieObject } from './ObjectInformatieObject';
@@ -76,12 +76,13 @@ export class GeefLijstZaakDocumentenMapper {
 
 export class GeefZaakDocumentMapper {
   map(doc: ZaakDocument): EnkelvoudigInformatieObject {
+    const url = `${process.env.APPLICATION_BASE_URL}/enkelvoudiginformatieobjecten/${doc['zkn:identificatie'].text}`;
     const enkelvoudigInformatieObject: EnkelvoudigInformatieObject = {
-      url: `https://example/com/api/v1/documenten/${doc['zkn:identificatie'].text}`,
+      url: url,
       auteur: doc['zkn:auteur'].text,
       beginRegistratie: this.mapDate(doc['zkn:creatiedatum'].text),
       bestandsdelen: [{
-        url: `https://example.com/api/v1/documenten/enkelvoudiginformatieobjecten/${randomUUID()}/download`,
+        url: `${url}/download`,
         lock: 'randomzogenaamdehash', //TODO hash opnemen??
         omvang: getFileSizeForBase64String(doc['zkn:inhoud'].text),
         volgnummer: 1,
