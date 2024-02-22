@@ -128,6 +128,7 @@ export class ApiStack extends Stack {
 
   enkelvoudiginformatieobjecten(apiResource: Resource) {
     const resource = apiResource.addResource('enkelvoudiginformatieobjecten').addResource('{uuid}');
+    const downloadResource = resource.addResource('download');
     const secretMTLSPrivateKey = Secret.fromSecretNameV2(this, 'tls-key-secret-2', Statics.secretMTLSPrivateKey);
     const mtlsCertificate = StringParameter.fromStringParameterName(this, 'mtls-cert-2', Statics.ssmMTLSClientCert);
     const mtlsRootCa = StringParameter.fromStringParameterName(this, 'mtls-root-ca-2', Statics.ssmMTLSRootCA);
@@ -151,6 +152,9 @@ export class ApiStack extends Stack {
     this.sharedLambdaConfiguration(lambda);
 
     resource.addMethod('GET', new LambdaIntegration(lambda), {
+      apiKeyRequired: true,
+    });
+    downloadResource.addMethod('GET', new LambdaIntegration(lambda), {
       apiKeyRequired: true,
     });
 
