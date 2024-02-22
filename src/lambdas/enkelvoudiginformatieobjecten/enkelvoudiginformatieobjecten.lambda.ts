@@ -25,9 +25,11 @@ export async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayPr
   const params = parseParameters(event);
   const requestHandler = new EnkelvoudigInformatieObjectenHandler(client);
   if (params.download) {
+    const fileBuffer = await requestHandler.handleDownloadRequest(params.uuid) as Buffer;
     return {
-      body: await requestHandler.handleDownloadRequest(params.uuid),
+      body: fileBuffer.toString('base64'),
       statusCode: 200,
+      isBase64Encoded: true,
     };
   } else {
     return {
