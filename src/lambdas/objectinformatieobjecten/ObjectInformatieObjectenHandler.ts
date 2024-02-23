@@ -1,25 +1,25 @@
 import { UUID } from 'crypto';
-import { CorsaClient } from '../../zgw/CorsaClient';
 import { DocumentVertaalService } from '../../zgw/DocumentVertaalService';
 import { OpenZaakClient } from '../../zgw/OpenZaakClient';
+import { ZaakDmsClient } from '../../zgw/ZaakDmsClient';
 
 export class ObjectInformatieObjectenHandler {
   service: DocumentVertaalService;
   openZaakClient: OpenZaakClient;
-  corsaClient: CorsaClient;
-  constructor(openZaakClient: OpenZaakClient, corsaClient: CorsaClient) {
+  zaakDmsClient: ZaakDmsClient;
+  constructor(openZaakClient: OpenZaakClient, zaakDmsClient: ZaakDmsClient) {
     this.openZaakClient = openZaakClient;
-    this.corsaClient = corsaClient;
-    this.service = new DocumentVertaalService(corsaClient);
+    this.zaakDmsClient = zaakDmsClient;
+    this.service = new DocumentVertaalService(zaakDmsClient);
   }
 
   async handleRequest(uuid: UUID) {
     const openZaak = await this.getOpenZaak(uuid);
-    let corsaZaakUuid = await this.getZaakCorsaUuid(openZaak);
-    if (!corsaZaakUuid) {
+    let corsaUuid = await this.getCorsaUuid(openZaak);
+    if (!corsaUuid) {
       throw Error('No matching Corsa zaak UUID found');
     }
-    return this.service.listObjectInformatieObjecten(corsaZaakUuid);
+    return this.service.listObjectInformatieObjecten(corsaUuid);
   };
 
   async getOpenZaak(zaakUuid: UUID) {
@@ -28,12 +28,12 @@ export class ObjectInformatieObjectenHandler {
     return openZaak;
   }
 
-  async getZaakCorsaUuid(openZaak: any) {
+  async getCorsaUuid(openZaak: any) {
     if (!openZaak.eigenschappen || openZaak.eigenschappen.length != 1) {
       throw Error('Expected exactly one eigenschap in open zaak');
     }
     const url = openZaak.eigenschappen[0];
-    const corsaZaakEigenschap = await this.openZaakClient.request(url);
-    return corsaZaakEigenschap.waarde;
+    const corsaIdEigenschap = await this.openZaakClient.request(url);
+    return corsaIdEigenschap.waarde;
   }
 }

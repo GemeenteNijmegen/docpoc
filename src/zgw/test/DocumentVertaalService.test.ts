@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { CorsaClientMock } from './CorsaClientMock';
+import { ZaakDmsClientMock } from './ZaakDmsClientMock';
 import * as zaak from '../../../test/samples/zaak.json';
 import { DocumentVertaalService } from '../DocumentVertaalService';
 import { OpenZaakClient } from '../OpenZaakClient';
@@ -18,7 +18,7 @@ jest.mock('../OpenZaakClient', () => {
 
 describe('Map objectInformatieObjecten calls to zaakDMS', () => {
   // test('Parse geefLijstZaakDocumenten to return UUIDs', async() => {
-  //   const client = new CorsaClient();
+  //   const client = new ZaakDmsClient();
   //   const docs = client.geefLijstZaakDocumenten(randomUUID());
   //   const mapper = new GeefLijstZaakDocumentenMapper();
   //   expect(mapper.map(docs)).toEqual([
@@ -32,18 +32,18 @@ describe('Map objectInformatieObjecten calls to zaakDMS', () => {
   // });
 
   test('Return objectinformatieObjecten object', async() => {
-    const corsaClient = new CorsaClientMock();
-    const service = new DocumentVertaalService(corsaClient);
+    const zaakDmsClient = new ZaakDmsClientMock();
+    const service = new DocumentVertaalService(zaakDmsClient);
     expect(await service.listObjectInformatieObjecten(randomUUID())).toHaveLength(6);
   });
 
-  test('Get corsa UUID from zaak', async() => {
+  test('Get zaakDms UUID from zaak', async() => {
     const zaakClient = new OpenZaakClient({
       baseUrl: 'https://example.com',
     });
     const sampleZaak = await zaakClient.request('/zaken/api/v1/zaken/d9696ca2-0f26-4322-b01d-c26046b71233');
-    const corsaId = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk.bron == 'Corsa_Id').kenmerk;
-    expect(corsaId).toBe('eeb22764-e184-487e-a2eb-b6280addd0f8');
+    const zaakDmsId = sampleZaak.kenmerken.find((kenmerk: any) => kenmerk.bron == 'ZAAKDMS_Id').kenmerk;
+    expect(zaakDmsId).toBe('eeb22764-e184-487e-a2eb-b6280addd0f8');
   });
 });
 

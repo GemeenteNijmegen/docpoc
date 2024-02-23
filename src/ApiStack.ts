@@ -110,10 +110,10 @@ export class ApiStack extends Stack {
         OPENZAAK_JWT_USER_ID: StringParameter.valueForStringParameter(this, Statics.ssmUserId),
         OPENZAAK_JWT_CLIENT_ID: StringParameter.valueForStringParameter(this, Statics.ssmClientId),
         OPENZAAK_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmBaseUrl),
-        CORSA_CLIENT_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmCorsaBaseUrl),
-        CORSA_CLIENT_MTLS_CERTIFICATE_PARAM_NAME: Statics.ssmMTLSClientCert,
-        CORSA_CLIENT_MTLS_ROOT_CA_BUNDLE_PARAM_NAME: Statics.ssmMTLSRootCA,
-        CORSA_CLIENT_MTLS_PRIVATE_KEY_SECRET_ARN: secretMTLSPrivateKey.secretArn,
+        ZAAKDMS_CLIENT_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmZaakDmsBaseUrl),
+        ZAAKDMS_CLIENT_MTLS_CERTIFICATE_PARAM_NAME: Statics.ssmMTLSClientCert,
+        ZAAKDMS_CLIENT_MTLS_ROOT_CA_BUNDLE_PARAM_NAME: Statics.ssmMTLSRootCA,
+        ZAAKDMS_CLIENT_MTLS_PRIVATE_KEY_SECRET_ARN: secretMTLSPrivateKey.secretArn,
       },
     });
     secretMTLSPrivateKey.grantRead(lambda);
@@ -141,10 +141,10 @@ export class ApiStack extends Stack {
       description: 'ZGW enkelvoudiginformatieobjecten endpoint implementation',
       timeout: Duration.seconds(6),
       environment: {
-        CORSA_CLIENT_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmCorsaBaseUrl),
-        CORSA_CLIENT_MTLS_CERTIFICATE_PARAM_NAME: Statics.ssmMTLSClientCert,
-        CORSA_CLIENT_MTLS_ROOT_CA_BUNDLE_PARAM_NAME: Statics.ssmMTLSRootCA,
-        CORSA_CLIENT_MTLS_PRIVATE_KEY_SECRET_ARN: secretMTLSPrivateKey.secretArn,
+        ZAAKDMS_CLIENT_BASE_URL: StringParameter.valueForStringParameter(this, Statics.ssmZaakDmsBaseUrl),
+        ZAAKDMS_CLIENT_MTLS_CERTIFICATE_PARAM_NAME: Statics.ssmMTLSClientCert,
+        ZAAKDMS_CLIENT_MTLS_ROOT_CA_BUNDLE_PARAM_NAME: Statics.ssmMTLSRootCA,
+        ZAAKDMS_CLIENT_MTLS_PRIVATE_KEY_SECRET_ARN: secretMTLSPrivateKey.secretArn,
       },
     });
     secretMTLSPrivateKey.grantRead(lambda);

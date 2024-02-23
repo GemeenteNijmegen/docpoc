@@ -3,6 +3,6 @@
   "uuid": "2b75cda3-5d13-476f-8990-ee9d7cdc4a25",
   "zaak": "https://openzaak.woweb.app/zaken/api/v1/zaken/ffac8d44-1b75-4cd0-9aac-4903f5545046",
   "eigenschap": "https://openzaak.woweb.app/catalogi/api/v1/eigenschappen/bdaf5bbf-6f88-4834-8dc9-363238f251e2",
-  "naam": "corsa_uuid",
+  "naam": "ZAAKDMS_uuid",
   "waarde": "uuid-value"
 }

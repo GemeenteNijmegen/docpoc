@@ -2,10 +2,10 @@ import { UUID } from 'crypto';
 import { XMLParser } from 'fast-xml-parser';
 import * as geefLijstZaakDocumenten from '../../../test/samples/geefLijstZaakdocumenten_Lv01.xml';
 import * as geefZaakDocument from '../../../test/samples/geefZaakdocumentLezen_Lv0.xml';
-import { CorsaClient } from '../CorsaClient';
+import { ZaakDmsClient } from '../ZaakDmsClient';
 import { ZaakDocument, ZaakDocumentSchema, ZaakDocumenten, ZaakDocumentenSchema } from '../ZaakDocument';
 
-export class CorsaClientMock implements CorsaClient {
+export class ZaakDmsClientMock implements ZaakDmsClient {
   private static readonly alwaysArray = [
     'soap:Envelope.soap:Body.zkn:zakLa01.zkn:antwoord.zkn:object.zkn:heeftRelevant',
   ];
@@ -16,13 +16,13 @@ export class CorsaClientMock implements CorsaClient {
       alwaysCreateTextNode: true,
       textNodeName: 'text',
       attributeNamePrefix: '',
-      isArray: (_name, jpath) => CorsaClientMock.alwaysArray.indexOf(jpath) !== -1,
+      isArray: (_name, jpath) => ZaakDmsClientMock.alwaysArray.indexOf(jpath) !== -1,
     });
   }
   async geefLijstZaakDocumenten(_uuid: UUID): Promise<ZaakDocumenten> {
     return this.parseZaakDocumenten(geefLijstZaakDocumenten.default);
   }
-  async geefZaakDocument(_corsaDocumentUuid: UUID): Promise<ZaakDocument> {
+  async geefZaakDocument(_zaakDmsDocumentUuid: UUID): Promise<ZaakDocument> {
     return this.parseZaakDocument(geefZaakDocument.default);
   }
   private parseZaakDocumenten(xml: string) {

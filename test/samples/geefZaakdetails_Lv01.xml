@@ -17,7 +17,7 @@
           <zkn:zaakniveau stuf:exact="true">1</zkn:zaakniveau>
           <zkn:deelzakenIndicatie stuf:exact="true">N</zkn:deelzakenIndicatie>
           <stuf:extraElementen>
-            <stuf:extraElement naam="corsa_dossierid" stuf:exact="true" stuf:indOnvolledigeDatum="V">Z21.053407</stuf:extraElement>
+            <stuf:extraElement naam="ZAAKDMS_dossierid" stuf:exact="true" stuf:indOnvolledigeDatum="V">Z21.053407</stuf:extraElement>
           </stuf:extraElementen>
           <zkn:heeftAlsInitiator stuf:entiteittype="ZAKBTRINI">
             <zkn:gerelateerde>

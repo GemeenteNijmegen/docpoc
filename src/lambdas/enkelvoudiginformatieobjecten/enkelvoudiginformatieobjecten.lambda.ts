@@ -1,9 +1,9 @@
 import { UUID } from 'crypto';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { EnkelvoudigInformatieObjectenHandler } from './enkelvoudigInformatieObjectenHandler';
-import { CorsaClient, CorsaClientImpl } from '../../zgw/CorsaClient';
+import { ZaakDmsClient, ZaakDmsClientImpl } from '../../zgw/ZaakDmsClient';
 
-let corsaClient: CorsaClient | false;
+let zaakDmsClient: ZaakDmsClient | false;
 
 function parseParameters(event: APIGatewayProxyEvent) {
   if (!event.pathParameters?.uuid) {
@@ -16,7 +16,7 @@ function parseParameters(event: APIGatewayProxyEvent) {
 }
 
 export async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-  const client = sharedCorsaClient();
+  const client = sharedZaakDmsClient();
   console.debug('Event', event);
   if (!process.env.OPENZAAK_BASE_URL) {
     throw Error('No openzaak BASEURL set in process.env');
@@ -40,12 +40,12 @@ export async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayPr
   }
 }
 
-function sharedCorsaClient(): CorsaClient {
-  if (!corsaClient) {
-    if (!process.env.CORSA_CLIENT_BASE_URL) {
+function sharedZaakDmsClient(): ZaakDmsClient {
+  if (!zaakDmsClient) {
+    if (!process.env.ZAAKDMS_CLIENT_BASE_URL) {
       throw Error('no base url set');
     }
-    corsaClient = new CorsaClientImpl(process.env.CORSA_CLIENT_BASE_URL);
+    zaakDmsClient = new ZaakDmsClientImpl(process.env.ZAAKDMS_CLIENT_BASE_URL);
   }
-  return corsaClient;
+  return zaakDmsClient;
 }

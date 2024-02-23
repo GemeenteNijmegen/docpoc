@@ -1,13 +1,13 @@
 import { UUID } from 'crypto';
-import { CorsaClient } from '../../zgw/CorsaClient';
 import { DocumentVertaalService } from '../../zgw/DocumentVertaalService';
+import { ZaakDmsClient } from '../../zgw/ZaakDmsClient';
 
 export class EnkelvoudigInformatieObjectenHandler {
   service: DocumentVertaalService;
-  corsaClient: CorsaClient;
-  constructor(corsaClient: CorsaClient) {
-    this.corsaClient = corsaClient;
-    this.service = new DocumentVertaalService(corsaClient);
+  zaakDmsClient: ZaakDmsClient;
+  constructor(zaakDmsClient: ZaakDmsClient) {
+    this.zaakDmsClient = zaakDmsClient;
+    this.service = new DocumentVertaalService(zaakDmsClient);
   }
 
   async handleDownloadRequest(documentUUID: UUID) {

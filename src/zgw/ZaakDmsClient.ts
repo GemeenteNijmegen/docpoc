@@ -6,12 +6,12 @@ import * as geefLijstZaakdocumentenRequest from './soapcalls/geefLijstzaakdocume
 import * as geefZaakDocumenRequest from './soapcalls/geefZaakdocumentLezen_EdcLv01.xml';
 import { ZaakDocument, ZaakDocumentSchema, ZaakDocumenten, ZaakDocumentenSchema } from './ZaakDocument';
 
-export interface CorsaClient {
+export interface ZaakDmsClient {
   geefLijstZaakDocumenten(uuid: UUID): Promise<ZaakDocumenten>;
-  geefZaakDocument(corsaDocumentUuid: UUID): Promise<ZaakDocument>;
+  geefZaakDocument(zaakDmsDocumentUuid: UUID): Promise<ZaakDocument>;
 }
 
-export class CorsaClientImpl implements CorsaClient {
+export class ZaakDmsClientImpl implements ZaakDmsClient {
 
   private static readonly alwaysArray = [
     'soap:Envelope.soap:Body.zkn:zakLa01.zkn:antwoord.zkn:object.zkn:heeftRelevant',
@@ -23,10 +23,10 @@ export class CorsaClientImpl implements CorsaClient {
 
   constructor(baseUrl?: string, apiClient?: ApiClient) {
     if (!baseUrl) {
-      if (!process.env.CORSA_CLIENT_BASE_URL) {
-        throw new Error('CORSA_CLIENT_BASE_URL not set and no baseUrl provided');
+      if (!process.env.ZAAKDMS_CLIENT_BASE_URL) {
+        throw new Error('ZAAKDMS_CLIENT_BASE_URL not set and no baseUrl provided');
       }
-      this.baseUrl = process.env.CORSA_CLIENT_BASE_URL;
+      this.baseUrl = process.env.ZAAKDMS_CLIENT_BASE_URL;
     } else {
       this.baseUrl = baseUrl;
     }
@@ -36,7 +36,7 @@ export class CorsaClientImpl implements CorsaClient {
       alwaysCreateTextNode: true,
       textNodeName: 'text',
       attributeNamePrefix: '',
-      isArray: (_name, jpath) => CorsaClientImpl.alwaysArray.indexOf(jpath) !== -1,
+      isArray: (_name, jpath) => ZaakDmsClientImpl.alwaysArray.indexOf(jpath) !== -1,
     });
   }
 
@@ -50,18 +50,18 @@ export class CorsaClientImpl implements CorsaClient {
 
   async initializeApiClient() {
     if (
-      !process.env.CORSA_CLIENT_MTLS_PRIVATE_KEY_SECRET_ARN ||
-      !process.env.CORSA_CLIENT_MTLS_CERTIFICATE_PARAM_NAME ||
-      !process.env.CORSA_CLIENT_MTLS_ROOT_CA_BUNDLE_PARAM_NAME
+      !process.env.ZAAKDMS_CLIENT_MTLS_PRIVATE_KEY_SECRET_ARN ||
+      !process.env.ZAAKDMS_CLIENT_MTLS_CERTIFICATE_PARAM_NAME ||
+      !process.env.ZAAKDMS_CLIENT_MTLS_ROOT_CA_BUNDLE_PARAM_NAME
     ) {
-      throw Error('Corsa client could not be initialized');
+      throw Error('ZaakDms client could not be initialized');
     }
 
     // Initialize in parallel
     const [mtlsPrivateKey, mtlsCertificate, mtlsRootCaBundle] = await Promise.all([
-      AWS.getSecret(process.env.CORSA_CLIENT_MTLS_PRIVATE_KEY_SECRET_ARN),
-      AWS.getParameter(process.env.CORSA_CLIENT_MTLS_CERTIFICATE_PARAM_NAME),
-      AWS.getParameter(process.env.CORSA_CLIENT_MTLS_ROOT_CA_BUNDLE_PARAM_NAME),
+      AWS.getSecret(process.env.ZAAKDMS_CLIENT_MTLS_PRIVATE_KEY_SECRET_ARN),
+      AWS.getParameter(process.env.ZAAKDMS_CLIENT_MTLS_CERTIFICATE_PARAM_NAME),
+      AWS.getParameter(process.env.ZAAKDMS_CLIENT_MTLS_ROOT_CA_BUNDLE_PARAM_NAME),
     ]);
 
     return new ApiClient(mtlsCertificate, mtlsPrivateKey, mtlsRootCaBundle);
@@ -83,11 +83,11 @@ export class CorsaClientImpl implements CorsaClient {
     return this.parseZaakDocumenten(response);
   }
 
-  async geefZaakDocument(corsaDocumentUuid: UUID): Promise<ZaakDocument> {
+  async geefZaakDocument(zaakDmsDocumentUuid: UUID): Promise<ZaakDocument> {
 
     // Construct the Zaak DMS request
     let body = geefZaakDocumenRequest.default;
-    body = body.replaceAll('{{documentid}}', corsaDocumentUuid);
+    body = body.replaceAll('{{documentid}}', zaakDmsDocumentUuid);
 
     const client = await this.getApiClient();
     client.setTimeout(4000); // 4 sec

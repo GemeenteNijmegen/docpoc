@@ -1,37 +1,37 @@
 import { UUID } from 'crypto';
-import { CorsaClient } from './CorsaClient';
 import { EnkelvoudigInformatieObject, EnkelvoudigInformatieObjectSchema } from './EnkelvoudigInformatieObjectSchema';
 import { GeefLijstZaakDocumentenMapper, GeefZaakDocumentMapper } from './GeefLijstZaakDocumentenMapper';
 import { ObjectInformatieObject } from './ObjectInformatieObject';
+import { ZaakDmsClient } from './ZaakDmsClient';
 /**
  * This class orchestrates the communication between, and translation to/from the zaakDMS implementation
  * and the ZGW implementation. It should partially implement the Document API. For now, the
  * /objectinformatieobjecten endpoint is the only supported endpoint.
  *
  * To map between 'Open zaak' and the zaakDMS service, an ID is expected to be present in the zaak-kenmerken
- * with bron 'Corsa_Id'.
+ * with bron 'ZAAKDMS_Id'.
  */
 export class DocumentVertaalService {
-  private corsaClient: CorsaClient;
-  constructor(corsaClient: CorsaClient) {
-    this.corsaClient = corsaClient;
+  private zaakDmsClient: ZaakDmsClient;
+  constructor(zaakDmsClient: ZaakDmsClient) {
+    this.zaakDmsClient = zaakDmsClient;
   }
-  async listObjectInformatieObjecten(corsaZaakUUID: UUID): Promise<ObjectInformatieObject[]> {
+  async listObjectInformatieObjecten(zaakDmsZaakUUID: UUID): Promise<ObjectInformatieObject[]> {
 
-    // Call ZaakDMS-endpoint with corsa UUID
-    const zaakDocumenten = await this.corsaClient.geefLijstZaakDocumenten(corsaZaakUUID);
-    const corsaDocumentUUIDs = new GeefLijstZaakDocumentenMapper().map(zaakDocumenten);
+    // Call ZaakDMS-endpoint with zaakDms UUID
+    const zaakDocumenten = await this.zaakDmsClient.geefLijstZaakDocumenten(zaakDmsZaakUUID);
+    const zaakDmsDocumentUUIDs = new GeefLijstZaakDocumentenMapper().map(zaakDocumenten);
 
     // Transform response to objectInformatieObjecten response
-    const objects = this.mapUUIDsToObjectInformatieObjecten(corsaZaakUUID, corsaDocumentUUIDs);
+    const objects = this.mapUUIDsToObjectInformatieObjecten(zaakDmsZaakUUID, zaakDmsDocumentUUIDs);
 
     // Return response
     return objects;
   }
 
   async getEnkelVoudigInformatieObject(documentUUID: UUID): Promise<EnkelvoudigInformatieObject> {
-    // Get document from Corsa based on provided UUID (last path part in call)
-    const documentDetails = await this.corsaClient.geefZaakDocument(documentUUID);
+    // Get document from ZaakDms based on provided UUID (last path part in call)
+    const documentDetails = await this.zaakDmsClient.geefZaakDocument(documentUUID);
 
     // Transform response to enkelvoudigInformatieObject object
     const enkelvoudigInformatieObject = new GeefZaakDocumentMapper().map(documentDetails);
@@ -40,7 +40,7 @@ export class DocumentVertaalService {
   }
 
   async downloadEnkelVoudigInformatieObject(documentUUID: UUID): Promise<any> {
-    const documentDetails = await this.corsaClient.geefZaakDocument(documentUUID);
+    const documentDetails = await this.zaakDmsClient.geefZaakDocument(documentUUID);
     return Buffer.from(documentDetails['zkn:inhoud'].text);
   }
 
